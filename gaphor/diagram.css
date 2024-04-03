@@ -191,6 +191,10 @@ association > end {
   padding: 4;
 }
 
+attribute, operation, slot {
+  white-space: normal
+}
+
 /* SysML */
 
 requirement {
