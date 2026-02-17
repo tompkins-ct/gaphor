@@ -1,4 +1,60 @@
-3.0.0 - Unreleased
+3.2.0
+-----
+
+- Troubleshooting info can now be found in the About dialog
+- Introduction of CSS classes: `.item` for all items you put on the diagram
+- Improved updates in Model Browser for attribute/parameter types a.o.
+- macOS: native window decorations and window menu
+
+Internal changes:
+
+- Model elements can not only be queried from their authoritative model
+- Gaphor requires Python 3.12 or newer (was 3.11)
+- Use Python native enumerations (`enum` module) in data models
+- Improvements to setting modeling values to strings instead of literal strings
+
+Bug fixes:
+
+- Fix save for new models
+- Fix message (sequence diagram) name placement
+- Windows: set English as the default installer language
+- Allow Rubberband selection in diagram frame
+
+3.1.0
+-----
+
+- Improve the UI with a replaced floating toolbar and view switcher in the element editor
+- Enhance window management: new window command, existing window activation
+- Add macOS-specific improvements: native menubar and window controls
+- Copy directly from diagram to clipboard as PNG and SVG
+- Improve drag and drop with highlighted drop zones
+- Add a "greeter" command-line option and D-Bus service file
+- Add support for Unlimited natural type as union type
+- Add a small teaser text to help users learn how to contribute to Gaphor
+
+Internal changes:
+
+- Update core dependencies (Gaphas 5, jinja2, PyGObject)
+- Improve storage with separate load/save modules
+- Enhance documentation including troubleshooting for Windows
+- Add project metadata
+- Improve compatibility with UML specifications
+- Fix build issues with Read the Docs
+- Apply various styling and performance improvements
+- Improve handling of legacy models (pre-3.0)
+
+Bug fixes:
+
+- Fix file export issues (exported file names and PDF diagram exports)
+- Correct issues with element relationships and properties
+- Fix window creation and activation problems
+- Resolve drag and drop issues between Activities and Partitions
+- Fix keyboard shortcuts including Ctrl+q
+- Correct handling of element values and limits
+- Fix touch interaction when dragging
+- Address UI display issues with long class names
+
+3.0.0
 -----
 
 - Improved UI, based on user feedback from the University of Mannheim and Mainz.

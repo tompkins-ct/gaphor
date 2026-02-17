@@ -3,7 +3,6 @@
 (help browser anyone?)
 """
 
-import logging
 import sys
 
 from gi.repository import Adw, Gtk
@@ -13,8 +12,7 @@ from gaphor.application import distribution
 from gaphor.core import action
 from gaphor.i18n import gettext, translated_ui_string
 from gaphor.settings import StyleVariant, settings
-
-logger = logging.getLogger(__name__)
+from gaphor.ui.help.debuginfo import DebugInfo
 
 
 def new_builder(ui_file):
@@ -26,10 +24,11 @@ def new_builder(ui_file):
 class HelpService(Service, ActionProvider):
     def __init__(self, application):
         self.application = application
-        self.preferences_window = None
+        self.preferences_dialog = None
+        self.debug_info = DebugInfo(application)
 
     def shutdown(self):
-        pass
+        self.debug_info.shutdown()
 
     @property
     def window(self):
@@ -41,9 +40,9 @@ class HelpService(Service, ActionProvider):
         about = builder.get_object("about")
 
         about.set_version(distribution().version)
-        about.set_transient_for(self.window)
-        about.set_modal(True)
-        about.set_visible(True)
+        about.set_debug_info(self.debug_info.create_debug_info())
+        about.present(self.window)
+        return about
 
     @action(name="app.shortcuts", shortcut="<Primary>question")
     def shortcuts(self):
@@ -55,10 +54,7 @@ class HelpService(Service, ActionProvider):
         builder.add_from_string(ui)
 
         shortcuts = builder.get_object("shortcuts-gaphor")
-        shortcuts.set_modal(True)
-        shortcuts.set_transient_for(self.window)
-
-        shortcuts.set_visible(True)
+        shortcuts.present(self.window)
         return shortcuts
 
     def _on_style_variant_selected(self, combo_row: Adw.ComboRow, param) -> None:
@@ -72,8 +68,8 @@ class HelpService(Service, ActionProvider):
                 settings.style_variant = StyleVariant.SYSTEM
 
     def _on_use_english_selected(self, switch_row: Adw.SwitchRow, param) -> None:
-        if self.preferences_window:
-            self.preferences_window.add_toast(
+        if self.preferences_dialog:
+            self.preferences_dialog.add_toast(
                 Adw.Toast(
                     title=gettext("Restart Gaphor to enable language changes"),
                 )
@@ -86,9 +82,7 @@ class HelpService(Service, ActionProvider):
 
         builder.add_from_string(ui)
 
-        self.preferences_window = builder.get_object("preferences")
-        self.preferences_window.set_modal(True)
-        self.preferences_window.set_transient_for(self.window)
+        self.preferences_dialog = builder.get_object("preferences")
 
         style_variant: Adw.ComboRow = builder.get_object("style_variant")
         use_english: Adw.SwitchRow = builder.get_object("use_english")
@@ -108,5 +102,5 @@ class HelpService(Service, ActionProvider):
         settings.bind_reset_tool_after_create(reset_tool_after_create, "active")
         settings.bind_remove_unused_elements(remove_unused_elements, "active")
 
-        self.preferences_window.set_visible(True)
-        return self.preferences_window
+        self.preferences_dialog.present(self.window)
+        return self.preferences_dialog

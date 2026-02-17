@@ -3,6 +3,7 @@ from uuid import uuid1
 import pytest
 
 from gaphor import UML
+from gaphor.core.changeset.compare import set_value_change_property_value
 from gaphor.core.modeling import (
     Diagram,
     ElementChange,
@@ -33,7 +34,6 @@ def change(element_factory):
                 kwargs["property_ref"] = str(uuid1())
         elif change_type is ValueChange:
             assert "property_name" in kwargs
-            assert "property_value" in kwargs
 
         c = element_factory.create(change_type)
         for n, v in kwargs.items():
@@ -85,7 +85,7 @@ def test_add_element_with_attribute_update(element_factory, modeling_language):
     vchange.op = "update"
     vchange.element_id = "1234"
     vchange.property_name = "name"
-    vchange.property_value = "my diagram"
+    set_value_change_property_value(vchange, "my diagram")
 
     tree = list(organize_changes(element_factory, modeling_language))
 
@@ -111,8 +111,8 @@ def test_remove_element_with_attribute_update(
         op="update",
         element_id=diagram.id,
         property_name="name",
-        property_value="my diagram",
     )
+    set_value_change_property_value(vchange, "my diagram")
 
     tree = list(organize_changes(element_factory, modeling_language))
 
@@ -133,8 +133,8 @@ def test_update_diagram_attribute(element_factory, modeling_language, change):
         op="update",
         element_id=diagram.id,
         property_name="name",
-        property_value="my diagram",
     )
+    set_value_change_property_value(vchange, "my diagram")
 
     tree = list(organize_changes(element_factory, modeling_language))
 
@@ -153,8 +153,8 @@ def test_update_model_attribute(element_factory, modeling_language, change):
         op="update",
         element_id=klass.id,
         property_name="name",
-        property_value="my class",
     )
+    set_value_change_property_value(vchange, "my class")
 
     tree = list(organize_changes(element_factory, modeling_language))
 
@@ -360,8 +360,8 @@ def test_update_presentation_to_existing_diagram(
         op="update",
         element_id=class_item.id,
         property_name="name",
-        property_value="new name",
     )
+    set_value_change_property_value(vchange, "new name")
 
     tree = list(organize_changes(element_factory, modeling_language))
 

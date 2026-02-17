@@ -32,7 +32,7 @@ jobs:
     if: "!contains(github.event.head_commit.message, 'skip ci')"
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@0080882f6c36860b6ba35c610c98ce87d4e2f26f # v2.10.2
+        uses: step-security/harden-runner@f4a75cfd619ee5ce8d5b864b0d183aff3c69b55a # v2.13.1
         with:
           disable-sudo: true
           disable-file-monitoring: true
@@ -44,27 +44,37 @@ jobs:
             api.github.com:443
             *.githubusercontent.com:443
             ghcr.io
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           persist-credentials: false
       - name: Set up Python
-        uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
+        uses: actions/setup-python@e797f83bcb11b83ae66e0230d6156d7c80228e7c # v6.0.0
         with:
           python-version: ${{ env.python_version }}
       - name: Check Github Actions workflows
-        run: pipx run zizmor --config .github/zizmor.yml .github/workflows/
+        run: pipx run --pip-args='--constraint=.github/github-requirements.txt' zizmor --config .github/zizmor.yml .github/workflows/
       - name: Lint with Pre-commit
         uses: pre-commit/action@2c7b3805fd2a0fd8c1884dcaebf91fc102a13ecd # v3.0.1
       - name: Check REUSE compliance
-        run: pip install --constraint=.github/constraints.txt reuse && python -m reuse lint
+        run: pip install --constraint=.github/github-requirements.txt reuse && python -m reuse lint
       - name: Check translations
-        run: pip install --constraint=.github/constraints.txt babel && python po/check-babel.py
+        run: pip install --constraint=.github/github-requirements.txt babel && python scripts/check_babel.py
       - name: Check Poetry lock file integrity
         run: |
-          python${python_version} -m pip install --constraint=.github/constraints.txt poetry
+          python${python_version} -m pip install --constraint=.github/github-requirements.txt poetry
           poetry config virtualenvs.in-project true
           poetry check
+      - name: Check versions are in sync
+        if: github.event_name == 'release'
+        env:
+          TAG_VERSION: "${{ github.ref_name }}"
+        run: |
+          PROJECT_VERSION="$(poetry version -s)"
+          APPDATA_VERSION="$(python .github/scripts/appdata-release.py)"
+          echo "Project version: $PROJECT_VERSION; tag: $TAG_VERSION appdata version: $APPDATA_VERSION"
+          test "$PROJECT_VERSION" == "$TAG_VERSION" || exit 1
+          test "$PROJECT_VERSION" == "$APPDATA_VERSION" || exit 1
 
   linux-wheel:
     name:  🐧 Linux (Wheel) with Python ${{ matrix.python_version }}
@@ -75,28 +85,33 @@ jobs:
     if: "!contains(github.event.head_commit.message, 'skip ci')"
     strategy:
       matrix:
-        python_version: ['3.11', '3.12', '3.13']
+        python_version: ['3.12', '3.13', '3.14']
     outputs:
       targz: gaphor-${{ steps.install.outputs.version }}.tar.gz
       wheel: gaphor-${{ steps.install.outputs.version }}-py3-none-any.whl
       version: ${{ steps.install.outputs.version }}
     steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@f4a75cfd619ee5ce8d5b864b0d183aff3c69b55a # v2.13.1
+        with:
+          egress-policy: audit
+      - name: Set up Path
+        run: echo "$HOME/.local/bin" >> $GITHUB_PATH
       - name: Install Linux Dependencies
         run: >
-          dnf install -y gcc git graphviz pkg-config python-launcher upx
-          mutter dbus-x11 gtk4 gobject-introspection-devel
-          cairo-gobject-devel gtksourceview5-devel libadwaita-devel cairo-devel
-          python${{ matrix.python_version }}-devel
+          dnf install -y gcc git pipx graphviz pkg-config python-launcher upx
+          mutter dbus-x11 gtksourceview5 libadwaita
+          cairo-gobject-devel python${{ matrix.python_version }}-devel
       - name: Switch Primary Python to ${{ matrix.python_version }}
         run: alternatives --install /usr/bin/python python /usr/bin/python${{ matrix.python_version }} 1
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           persist-credentials: false
       - name: Set ownership of checkout directory
         run: chown -R $(id -u):$(id -g) $PWD
       - name: Use Python Dependency Cache
-        uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-python${{ matrix.python-version }}-${{ hashFiles('**/poetry.lock') }}-41
@@ -111,25 +126,25 @@ jobs:
         run: |
           eval $(dbus-launch --auto-syntax)
           mutter --wayland --no-x11 --sm-disable --headless -- poetry run pytest --cov
-      - name: Upload Code Coverage to Code Climate
+          poetry run coverage lcov
+      - name: Upload Code Coverage to Qlty
         if: ${{ matrix.python_version == env.python_version }}
-        uses: paambaati/codeclimate-action@f429536ee076d758a24705203199548125a28ca7 # v9.0.0
-        env:
-          CC_TEST_REPORTER_ID: 05f6288b94a87daa172d3e96a33ec331a4374be7d01eb9a42b3b21c4c550a8ff
+        uses: qltysh/qlty-action/coverage@a19242102d17e497f437d7466aa01b528537e899 # v1
         with:
-          coverageCommand: poetry run coverage xml --omit="/tmp/*"
+          token: ${{ secrets.QLTY_COVERAGE_TOKEN }}
+          files: coverage.lcov
       - name: Create Source Dist and Wheel
         if: ${{ matrix.python_version == env.python_version }}
         run: poetry build
       - name: Upload gaphor-${{ steps.install.outputs.version }}.tar.gz
         if: ${{ matrix.python_version == env.python_version }}
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: gaphor-${{ steps.install.outputs.version }}.tar.gz
           path: dist/gaphor-${{ steps.install.outputs.version }}.tar.gz
       - name: Upload gaphor-${{ steps.install.outputs.version }}-py3-none-any.whl
         if: ${{ matrix.python_version == env.python_version }}
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: gaphor-${{ steps.install.outputs.version }}-py3-none-any.whl
           path: dist/gaphor-${{ steps.install.outputs.version }}-py3-none-any.whl
@@ -139,24 +154,24 @@ jobs:
     needs: lint
     runs-on: ubuntu-24.04
     container:
-      image: bilelmoussaoui/flatpak-github-actions:gnome-45
+      image: ghcr.io/flathub-infra/flatpak-github-actions:gnome-49
       options: --privileged
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@0080882f6c36860b6ba35c610c98ce87d4e2f26f # v2.10.2
+        uses: step-security/harden-runner@f4a75cfd619ee5ce8d5b864b0d183aff3c69b55a # v2.13.1
         with:
           egress-policy: audit
 
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           persist-credentials: false
       - name: Use Python Dependency Cache
-        uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}-22.04
-      - uses: flatpak/flatpak-github-actions/flatpak-builder@acbc99edf9fca4bfcc47d9f57a5e105f9ec13e50 # master
+      - uses: flatpak/flatpak-github-actions/flatpak-builder@92ae9851ad316786193b1fd3f40c4b51eb5cb101 # master
         with:
           bundle: gaphor.flatpak
           manifest-path: org.gaphor.Gaphor.json
@@ -168,7 +183,7 @@ jobs:
     strategy:
       matrix:
         target:
-          - runner: macos-13
+          - runner: macos-15-intel
             arch: intel
           - runner: macos-15
             arch: arm
@@ -183,33 +198,35 @@ jobs:
       artifact-intel: ${{ steps.output.outputs.artifact-intel }}
       artifact-arm: ${{ steps.output.outputs.artifact-arm }}
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           persist-credentials: false
       - name: Install macOS Dependencies
         env:
-          HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK: 1
           HOMEBREW_NO_INSTALL_CLEANUP: 1
         run: |
-          brew update
-          # Pre-installed Python conflicts with Homebrew Python
+          # Pre-installed Python conflicts with Homebrew Python (Intel only)
           # https://github.com/actions/runner-images/issues/9966
-          brew install --overwrite python@${python_version}
-          brew unlink pkg-config@0.29.2 || true
+          brew install --quiet --overwrite python@${python_version}
           brew install gtksourceview5 libadwaita adwaita-icon-theme gobject-introspection graphviz create-dmg
-      - name: Set up Python
-        uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
-        with:
-          python-version: ${{ env.python_version }}
-          cache: pip
+      - name: Workaround for broken gdk-pixbuf SVG loader
+        run: |
+          # Fix gdk-pixbuf SVG loader. This is broken on Homebrew (July 2nd 2025)
+          # See https://gitlab.gnome.org/GNOME/librsvg/-/issues/1161, https://github.com/Homebrew/brew/pull/9102
+          install_name_tool -change @rpath/librsvg-2.2.dylib $(brew --prefix librsvg)/lib/librsvg-2.2.dylib $(brew --prefix librsvg)/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader_svg.so
+          codesign --sign - --force --preserve-metadata=entitlements,requirements,flags,runtime $(brew --prefix librsvg)/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader_svg.so
+          GDK_PIXBUF_MODULEDIR=$(brew --prefix)/lib/gdk-pixbuf-2.0/2.10.0/loaders gdk-pixbuf-query-loaders --update-cache
+      - name: Ensure Homebrew Library Path
+        run: echo "DYLD_LIBRARY_PATH=$(brew --prefix)/lib" >> $GITHUB_ENV
+        shell: bash
       - name: Install Dependencies
         id: install
         uses: ./.github/actions/install
         with:
           python-command: python${{ env.python_version }}
       - name: Run Gaphor Self-Test
-        run: poetry run gaphor self-test || poetry run gaphor self-test
+        run: poetry run gaphor self-test
       - name: Run Gaphor Tests
         run: poetry run pytest
       - name: Create macOS Application
@@ -237,14 +254,14 @@ jobs:
     strategy:
       matrix:
         target:
-          - runner: macos-13
+          - runner: macos-15-intel
             artifact: ${{ needs.macos.outputs.artifact-intel }}
           - runner: macos-15
             artifact: ${{ needs.macos.outputs.artifact-arm }}
     runs-on: ${{ matrix.target.runner }}
     timeout-minutes: 10
     steps:
-      - uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+      - uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
         id: download
         with:
           name: ${{ matrix.target.artifact }}
@@ -261,11 +278,11 @@ jobs:
   windows:
     name: 🪟 Windows
     needs: lint
-    runs-on: windows-latest
+    runs-on: windows-2022
     env:
       INCLUDE: C:\gtk\include;C:\gtk\include\cairo;C:\gtk\include\glib-2.0;C:\gtk\include\gobject-introspection-1.0;C:\gtk\lib\glib-2.0\include;
       LIB: C:\gtk\lib
-      gvsbuild_version: 2024.12.0
+      gvsbuild_version: 2025.9.0
     permissions:
       contents: write
     timeout-minutes: 45
@@ -274,7 +291,7 @@ jobs:
     if: "!contains(github.event.head_commit.message, 'skip ci')"
     steps:
       - name: GTK binaries get from cache
-        uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         id: cache
         with:
           path: C:\gtk\**
@@ -285,24 +302,26 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           HASH: c5cd0079f47124190d9c66d3661da018eccc1dfc3dd31b5c01531df7f88006e5
         run: |
-          gh release download --repo wingtk/gvsbuild ${env:gvsbuild_version} -p 'GTK4_Gvsbuild_${env:gvsbuild_version}_x64.zip'
-          (Get-FileHash GTK4_Gvsbuild_${env:gvsbuild_version}_x64.zip).Hash -eq $HASH
-          7z x GTK4_Gvsbuild_${env:gvsbuild_version}_x64.zip -oC:\gtk -y
+          $version = $env:gvsbuild_version
+          gh release download --repo wingtk/gvsbuild "$version" -p "GTK4_Gvsbuild_$($version)_x64.zip"
+          (Get-FileHash "GTK4_Gvsbuild_$($version)_x64.zip").Hash -eq $HASH
+          7z x "GTK4_Gvsbuild_$($version)_x64.zip" -oC:\gtk -y
       - name: Set up env
         run: |
           Write-Output "PKG_CONFIG=C:\gtk\bin\pkgconf.exe" >> $env:GITHUB_ENV
           Write-Output "XDG_DATA_HOME=$HOME\.local\share" >> $env:GITHUB_ENV
           Write-Output "C:\gtk\bin" >> $env:GITHUB_PATH
           choco install graphviz -y
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           persist-credentials: false
       - name: Set up Python
-        uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
+        uses: actions/setup-python@e797f83bcb11b83ae66e0230d6156d7c80228e7c # v6.0.0
         with:
           python-version: ${{ env.python_version }}
           cache: pip
+          check-latest: true  # Python 3.13.4 is broken on Windows
       - name: Install Dependencies
         id: install
         uses: ./.github/actions/install
@@ -315,8 +334,7 @@ jobs:
         with:
           mainline_build: ${{ env.mainline_build }}
           version: ${{ steps.install.outputs.version }}
-          cert_password: ${{ secrets.CERTPASSWORD }}
-          base64_encoded_pfx: ${{ secrets.BASE64_ENCODED_PFX }}
+          signpath_api_token: ${{ secrets.SIGNPATH_API_TOKEN }}
 
   check-windows-installer:
     name: 🕵️ Check Windows Installer
@@ -324,7 +342,7 @@ jobs:
     runs-on: windows-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+      - uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
         with:
           name: ${{ needs.windows.outputs.installer }}
           path: .
@@ -352,12 +370,12 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+      - uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
         with:
           name: ${{ needs.windows.outputs.installer }}
           path: .
       - name: VirusTotal Scan
-        uses: crazy-max/ghaction-virustotal@93ce6fb8ca09fed3d3d2010a8be65552ae5d3854 # v4.1.0
+        uses: crazy-max/ghaction-virustotal@d34968c958ae283fe976efed637081b9f9dcf74f # v4.2.0
         if: env.mainline_build == 'true'
         with:
           vt_api_key: ${{ secrets.VIRUSTOTAL_API_KEY }}
@@ -378,20 +396,39 @@ jobs:
       version: ${{ needs.linux-wheel.outputs.version }}
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@0080882f6c36860b6ba35c610c98ce87d4e2f26f # v2.10.2
+        uses: step-security/harden-runner@f4a75cfd619ee5ce8d5b864b0d183aff3c69b55a # v2.13.1
         with:
           egress-policy: audit
 
-      - uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+      - uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
         with:
           name: ${{ needs.linux-wheel.outputs.targz }}
           path: dist
-      - uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+      - uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
         with:
           name: ${{ needs.linux-wheel.outputs.wheel }}
           path: dist
       - name: Publish package distributions to PyPI
-        uses: pypa/gh-action-pypi-publish@67339c736fd9354cd4f8cb0b744f2b82a74b5c70 # release/v1
+        uses: pypa/gh-action-pypi-publish@ed0c53931b1dc9bd32cbe73a98c7f6766f8a527e # release/v1
+
+  submit-to-winget:
+    name: 📦 Submit to WinGet (release only)
+    needs: [ publish-to-pypi ]
+    runs-on: windows-latest
+    continue-on-error: true
+    timeout-minutes: 15
+    if: github.event_name == 'release'
+    steps:
+      - name: Download wingetcreate
+        run: |
+          Invoke-WebRequest -Uri "https://aka.ms/wingetcreate/latest" -OutFile "wingetcreate.exe"
+      - name: Submit package to WinGet
+        env:
+          WINGET_PAT: ${{ secrets.WINGET_PAT }}
+          VERSION: ${{ needs.publish-to-pypi.outputs.version }}
+        run: |
+          $installerUrl = "https://github.com/gaphor/gaphor/releases/download/$env:VERSION/gaphor-$env:VERSION-installer.exe"
+          .\wingetcreate.exe update Gaphor.Gaphor --version $env:VERSION --urls $installerUrl --submit --token $env:WINGET_PAT
 
   trigger-website-version-update:
     name: ⏩ gaphor.org version update
@@ -399,14 +436,20 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@0080882f6c36860b6ba35c610c98ce87d4e2f26f # v2.10.2
+        uses: step-security/harden-runner@f4a75cfd619ee5ce8d5b864b0d183aff3c69b55a # v2.13.1
         with:
           egress-policy: audit
 
-      - name: Repository Dispatch
-        uses: peter-evans/repository-dispatch@ff45666b9427631e3450c54a1bcbee4d9ff4d7c0 # v3.0.0
+      - name: Create GitHub App Token
+        uses: actions/create-github-app-token@67018539274d69449ef7c02e8e71183d1719ab42 # v2.1.4
+        id: generate-token
         with:
-          token: ${{ secrets.WEBSITE_DISPATCH_TOKEN }} # Expires 2024-07-08
+          app-id: ${{ secrets.GAPHOR_UPDATER_APP_ID }}
+          private-key: ${{ secrets.GAPHOR_UPDATER_APP_PRIVATE_KEY }}
+      - name: Repository Dispatch
+        uses: peter-evans/repository-dispatch@5fc4efd1a4797ddb68ffd0714a238564e4cc0e6f # v4.0.0
+        with:
+          token: ${{ steps.generate-token.outputs.token }}
           repository: gaphor/gaphor.github.io
           event-type: version-update
           client-payload: '{ "version": "${{ needs.publish-to-pypi.outputs.version }}" }'
@@ -417,16 +460,16 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@0080882f6c36860b6ba35c610c98ce87d4e2f26f # v2.10.2
+        uses: step-security/harden-runner@f4a75cfd619ee5ce8d5b864b0d183aff3c69b55a # v2.13.1
         with:
           egress-policy: audit
 
       - name: Wait for PyPI to sync after version update
         run: sleep 30s
       - name: Repository Dispatch
-        uses: peter-evans/repository-dispatch@ff45666b9427631e3450c54a1bcbee4d9ff4d7c0 # v3.0.0
+        uses: peter-evans/repository-dispatch@5fc4efd1a4797ddb68ffd0714a238564e4cc0e6f # v4.0.0
         with:
-          token: ${{ secrets.FLATHUB_DISPATCH_TOKEN }} # Expires 2024-07-08
+          token: ${{ secrets.FLATHUB_DISPATCH_TOKEN }} # Expires 2026-06-24
           repository: flathub/org.gaphor.Gaphor
           event-type: version-update
           client-payload: '{ "version": "${{ needs.publish-to-pypi.outputs.version }}" }'

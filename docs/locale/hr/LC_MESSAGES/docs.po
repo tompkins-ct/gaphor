@@ -8,35 +8,39 @@ msgstr ""
 "Project-Id-Version: Gaphor 2.18.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-30 14:25-0500\n"
-"PO-Revision-Date: 2024-12-21 08:12+0000\n"
+"PO-Revision-Date: 2025-10-25 16:02+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
+"Language-Team: Croatian <https://hosted.weblate.org/projects/gaphor/"
+"docs-gaphor-org/hr/>\n"
 "Language: hr\n"
-"Language-Team: Croatian <https://hosted.weblate.org/projects/gaphor/docs-"
-"gaphor-org/hr/>\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural="
+"(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? "
+"1 : 2);\n"
+"X-Generator: Weblate 5.14.1-dev\n"
 "Generated-By: Babel 2.16.0\n"
 
 #: ../changelog.rst:2
 msgid "Change Log"
-msgstr ""
+msgstr "Dnevnik promjena"
 
 #: ../changelog.rst:4
 msgid ""
 "Our change log is with the project's source code on `GitHub "
 "<https://github.com/gaphor/gaphor/blob/main/CHANGELOG.md>`_."
 msgstr ""
+"Naš dnevnik promjena s izvornim kodom projekta se nalazi na `GitHubu "
+"<https://github.com/gaphor/gaphor/blob/main/CHANGELOG.md>`_."
 
 #: ../changelog.rst:8
 msgid "The latest version may not have been released yet."
-msgstr ""
+msgstr "Najnovija verzija možda još nije objavljena."
 
 #: ../coffee_machine.md:1
 msgid "Tutorial: Coffee Machine"
-msgstr ""
+msgstr "Vježba: aparat za kavu"
 
 #: ../coffee_machine.md:4 ../first_model.md:4
 msgid ""
@@ -228,29 +232,31 @@ msgstr ""
 
 #: ../coffee_machine.md:105
 msgid "Pillars"
-msgstr ""
+msgstr "Temelji"
 
 #: ../coffee_machine.md:107
 msgid ""
 "There are four pillars of SysML which help classify the types of diagrams"
 " based on what they represent:"
 msgstr ""
+"Postoje četiri temelja SysML-a koji pomažu u klasifikaciji vrsta dijagrama "
+"na osnovi onoga što predstavljaju:"
 
 #: ../coffee_machine.md:110
 msgid "Behavior: The functionality of a system"
-msgstr ""
+msgstr "Ponašanje: Funkcionalnost sustava"
 
 #: ../coffee_machine.md:111
 msgid "Structure: How a system is formed using parts and connections"
-msgstr ""
+msgstr "Struktura: Kako se sustav formira pomoću dijelova i veza"
 
 #: ../coffee_machine.md:112
 msgid "Requirements: Written statements that constrain the system"
-msgstr ""
+msgstr "Zahtjevi: Pisane izjave koje ograničavaju sustav"
 
 #: ../coffee_machine.md:113
 msgid "Parametric: Enforces mathematical rules across values in the system"
-msgstr ""
+msgstr "Parametarski: Provodi matematička pravila za sve vrijednosti u sustavu"
 
 #: ../coffee_machine.md:115
 msgid ""
@@ -258,6 +264,8 @@ msgid ""
 "video by Rick Steiner called [The Four Pillars of "
 "SysML](https://youtu.be/998UznK9ogY)."
 msgstr ""
+"Ako želiš saznati više o ovim temeljima, pogledaj 30-minutni video Ricka "
+"Steinera [The Four Pillars of SysML](https://youtu.be/998UznK9ogY)."
 
 #: ../coffee_machine.md:118
 msgid ""
@@ -288,7 +296,7 @@ msgstr ""
 
 #: ../coffee_machine.md:130
 msgid "Table of Contents"
-msgstr ""
+msgstr "Sadržaj"
 
 #: ../coffee_machine_concept.md:5
 msgid "Coffee Machine: Concept Level"
@@ -426,6 +434,8 @@ msgid ""
 "Use case diagram showing an actor named Barista and a use case called "
 "Brew espresso"
 msgstr ""
+"Dijagram slučaja primjene koji prikazuje sudionika s imenom „Barista” i "
+"slučaj primjene pod imenom „Brew espresso”"
 
 #: ../coffee_machine_concept.md:70
 msgid ""
@@ -478,7 +488,7 @@ msgstr "Aparat za kavu"
 
 #: ../coffee_machine_concept.md:92
 msgid "Roasted Coffee"
-msgstr "Kava u zrnu"
+msgstr "Pržena kava"
 
 #: ../coffee_machine_concept.md:93
 msgid "Coffee Grinder"
@@ -568,6 +578,8 @@ msgid ""
 "Block definition diagram showing context of the coffee shop with external"
 " entities"
 msgstr ""
+"Dijagram definicije blokova koji prikazuje kontekst prodavaonice kave s "
+"eksternim entitetima"
 
 #: ../coffee_machine_concept.md:143
 msgid ""
@@ -750,6 +762,8 @@ msgstr ""
 #: ../coffee_machine_logical.md:63
 msgid "State machine diagram showing logical states including on and off"
 msgstr ""
+"Dijagram automata konačnih stanja koji prikazuje logička stanja, uključujući "
+"uključeno i isključeno"
 
 #: ../coffee_machine_logical.md:68
 msgid ""
@@ -778,10 +792,13 @@ msgid ""
 "made up of. Since we are at the logical level, these blocks should be "
 "agnostic to technical choices."
 msgstr ""
+"Logička struktura prikazuje od kojih je logičkih blokova sastavljen aparat "
+"za espresso. Budući da se nalazimo na logičkoj razini, ti blokovi trebaju "
+"biti neovisni o tehničkim rješenjima."
 
 #: ../coffee_machine_logical.md:84
 msgid "The following logical blocks are part of the espresso machine:"
-msgstr ""
+msgstr "Sljedeći logički blokovi su dio aparata za espresso:"
 
 #: ../coffee_machine_logical.md:85
 msgid "Water tank"
@@ -804,13 +821,12 @@ msgid "Controller"
 msgstr "Kontroler"
 
 #: ../coffee_machine_logical.md:90
-#, fuzzy
 msgid "Group head"
-msgstr "Grupa"
+msgstr "Priključak za portafilter"
 
 #: ../coffee_machine_logical.md:91
 msgid "HMI"
-msgstr ""
+msgstr "HMI sučelje"
 
 #: ../coffee_machine_logical.md:93
 msgid ""
@@ -822,6 +838,8 @@ msgstr ""
 #: ../coffee_machine_logical.md:97
 msgid "Block definition diagram showing the coffee machine and its logical parts"
 msgstr ""
+"Dijagram definicije blokova koji prikazuje aparat za kavu i njegove logične "
+"dijelove"
 
 #: ../coffee_machine_logical.md:102
 msgid ""
@@ -918,6 +936,7 @@ msgstr ""
 #: ../coffee_machine_logical.md:158
 msgid "Internal block diagram showing the clear box view of the espresso machine"
 msgstr ""
+"Interni blok dijagram koji prikazuje prozirnu kutiju aparata za espresso"
 
 #: ../coffee_machine_logical.md:163
 msgid ""
@@ -1039,11 +1058,11 @@ msgstr "Ovdje izvodimo dva uvjeta:"
 
 #: ../coffee_machine_logical.md:217
 msgid "Controller commands heat up"
-msgstr ""
+msgstr "Naredbe kontrolera zagrijavaju"
 
 #: ../coffee_machine_logical.md:218
 msgid "900kPa of water pressure"
-msgstr ""
+msgstr "900 kPa tlaka vode"
 
 #: ../coffee_machine_logical.md:220
 msgid ""
@@ -1060,7 +1079,7 @@ msgstr ""
 
 #: ../coffee_machine_wrapup.md:1
 msgid "Coffee Machine: Summary"
-msgstr ""
+msgstr "Aparat za kavu: Sažetak"
 
 #: ../coffee_machine_wrapup.md:3
 msgid ""
@@ -1193,21 +1212,24 @@ msgstr ""
 
 #: ../container.md:33
 msgid "There are two options:"
-msgstr ""
+msgstr "Postoje dvije mogućnosti:"
 
 #: ../container.md:34
 msgid "Using a local VNC viewer"
-msgstr ""
+msgstr "Korištenje lokalne aplikacije VNC viewer"
 
 #: ../container.md:35
 msgid "Download and install VNC viewer of your choice (e.g. realvnc)"
-msgstr ""
+msgstr "Preuzmi i instaliraj VNC preglednik po tvom izboru (npr. realvnc)"
 
 #: ../container.md:36
 msgid ""
 "Specify remote hostname as *localhost* and port as *5901* and connect "
 "VNC. The port number should be same as specified in attribute *vncPort*"
 msgstr ""
+"Navedi ime udaljenog hosta kao *localhost* i priključak kao *5901* te se "
+"spoji na VNC. Broj priključka treba biti isti kao što je naveden u atributu "
+"*vncPort*"
 
 #: ../container.md:37
 msgid ""
@@ -1215,14 +1237,17 @@ msgid ""
 "[debugging/running](https://github.com/gaphor/gaphor/blob/main/.devcontainer/devcontainer.json)"
 " Gaphor the familiar Graphic window should be displayed in VNC view"
 msgstr ""
+"Nakon [otklanjanju grešaka/pokretanja](https://github.com/gaphor/gaphor/blob/"
+"main/.devcontainer/devcontainer.json) Gaphora trebao bi se prikazati poznati "
+"grafički prozor u VNC prikazu"
 
 #: ../container.md:39
 msgid "Using noVNC viewer on the Browser"
-msgstr ""
+msgstr "Korištenje aplikacije noVNC viewer u pregledniku"
 
 #: ../container.md:40
 msgid "This is based on [noVNC](https://novnc.com/info.html) application"
-msgstr ""
+msgstr "Ovo se temelji na aplikaciji [noVNC](https://novnc.com/info.html)"
 
 #: ../container.md:41
 msgid ""
@@ -1230,6 +1255,9 @@ msgid ""
 "*http://127.0.0.1:6080/*. The port number should be same as specified in "
 "attribute *webPort*"
 msgstr ""
+"Otvori preglednik na svom lokalnom računalu i unesi adresu *http://127.0.0.1:"
+"6080/*. Broj priključka (port) mora biti isti kao onaj navedeni u atributu "
+"*webPort*"
 
 #: ../container.md:42
 msgid ""
@@ -1237,6 +1265,8 @@ msgid ""
 "*vscode*. The password should be same as specified in attribute "
 "*password*"
 msgstr ""
+"Otvorit će se noVNC prozor, klikni na „Poveži” i unesi lozinku kao *vscode*. "
+"Lozinka mora biti ista kao ona navedena u atributu *password*"
 
 #: ../container.md:43
 msgid ""
@@ -1245,6 +1275,9 @@ msgid ""
 " Gaphor the familiar Graphic window should be displayed in noVNC view on "
 "Browser"
 msgstr ""
+"Nakon [otklanjanju grešaka/pokretanja](https://github.com/gaphor/gaphor/blob/"
+"main/.devcontainer/devcontainer.json) Gaphora trebao bi se prikazati poznati "
+"grafički prozor u noVNC prikazu u pregledniku"
 
 #: ../contribute.md:1
 msgid "Contribute to Gaphor"
@@ -1535,7 +1568,7 @@ msgstr ""
 
 #: ../design_principles.md:101
 msgid "What else?"
-msgstr ""
+msgstr "Što još?"
 
 #: ../design_principles.md:103
 msgid "On a technical level, the following principles are also applicable:"
@@ -1573,7 +1606,7 @@ msgid ""
 "`EventManager` service. Gaphor is highly event driven:"
 msgstr ""
 "U Gaphoru upravljamo pretplatama za rukovanje događajima putem usluge "
-"„Upravljač događaja”. Gaphor je izrazito vođen događajima:"
+"`EventManager` (Upravljač događaja). Gaphor je izrazito vođen događajima:"
 
 #: ../event_system.md:9
 msgid "Changes in the loaded model are emitted as events"
@@ -1696,10 +1729,12 @@ msgid ""
 "![The Gaphor main window showing a single class added to the "
 "model.](images/first-model-class.png)"
 msgstr ""
+"![Glavni prozor Gaphora koji prikazuje jednu modelu dodanu klasu.]"
+"(images/first-model-class.png)"
 
 #: ../first_model.md:25
 msgid "The Gaphor main window showing a single class added to the model."
-msgstr ""
+msgstr "Glavni prozor Gaphora koji prikazuje jednu modelu dodanu klasu."
 
 #: ../first_model.md:27
 msgid "It's simple to add elements to a diagram."
@@ -1730,19 +1765,17 @@ msgid ""
 msgstr ""
 
 #: ../first_model.md:40
-#, fuzzy
 msgid ""
 "Select Generalization (![Icon for generalization "
 "relationships.](../gaphor/ui/icons/hicolor/scalable/actions/gaphor-"
 "generalization-symbolic.svg))."
 msgstr ""
-"Odberi generaliziranje (![new "
-"generalization](../gaphor/ui/icons/hicolor/scalable/actions/gaphor-"
-"generalization-symbolic.svg))."
+"Odberi generaliziranje (![Ikona za generaliziranje odnosa.](../gaphor/ui/"
+"icons/hicolor/scalable/actions/gaphor-generalization-symbolic.svg))."
 
 #: ../first_model.md:40
 msgid "Icon for generalization relationships."
-msgstr "Ikona za generalizaciju odnosa."
+msgstr "Ikona za generalizaciju veza."
 
 #: ../first_model.md:42
 msgid ""
@@ -1757,12 +1790,16 @@ msgid ""
 "![The Gaphor main window showing two classes connected by a "
 "generalization relationship.](images/first-model-generalization.png)"
 msgstr ""
+"![Glavni prozor Gaphora koji prikazuje dvije klase koje su povezane odnosom "
+"generalizacije.](images/first-model-generalization.png)"
 
 #: ../first_model.md:47
 msgid ""
 "The Gaphor main window showing two classes connected by a generalization "
 "relationship."
 msgstr ""
+"Glavni prozor Gaphora koji prikazuje dvije klase koje su povezane odnosom "
+"generalizacije."
 
 #: ../first_model.md:49
 msgid ""
@@ -1773,33 +1810,32 @@ msgstr ""
 
 #: ../first_model.md:49 ../plugins.md:45 ../style_sheets.md:343
 msgid "Menu icon"
-msgstr ""
+msgstr "Ikona izbornika"
 
 #: ../first_model.md:53
 msgid "Creating New Diagrams"
 msgstr "Stvaranje novih dijagrama"
 
 #: ../first_model.md:55
-#, fuzzy
 msgid ""
 "To create a new diagram, use the Model Browser. Select the element that "
 "should contain the new diagram. For now, select _New Model_. Click the "
 "New Diagram menu (![Plus symbol of the New Diagram popup menu.](images"
 "/list-add-symbolic.svg)) in the header bar."
 msgstr ""
-"Za izradu novog dijagrama koristi „Preglednik modela”. Odaberi element "
-"koji bi trebao sadržavati novi dijagram. Za sada, odaberi _Novi model_. "
-"Pritisni izbornik „Novi dijagram” (![novi dijagram](images/list-add-"
-"symbolic.svg)) u traci zaglavlja."
+"Za izradu novog dijagrama koristi „Preglednik modela”. Odaberi element koji "
+"bi trebao sadržavati novi dijagram. Za sada, odaberi _Novi model_. Pritisni "
+"izbornik „Novi dijagram” (![Simbol plusa u skočnom izborniku Novi dijagram.]("
+"images/list-add-symbolic.svg)) u traci zaglavlja."
 
 #: ../first_model.md:55
 msgid "Plus symbol of the New Diagram popup menu."
 msgstr ""
 
 #: ../first_model.md:59
-#, fuzzy
 msgid "![The New Diagram popup window.](images/first-model-new-diagram-popup.png)"
-msgstr "![slika](/images/first-model-new-diagram-popup.png)"
+msgstr ""
+"![Skočni prozor Novi dijagram.](images/first-model-new-diagram-popup.png)"
 
 #: ../first_model.md:59
 msgid "The New Diagram popup window."
@@ -1837,12 +1873,11 @@ msgstr ""
 
 #: ../first_model.md:78
 msgid "Examples of Gaphor models"
-msgstr ""
+msgstr "Primjeri Gaphor modela"
 
 #: ../first_model.md:80
-#, fuzzy
 msgid "SysML Models"
-msgstr "CSS element"
+msgstr "SysML modeli"
 
 #: ../first_model.md:81
 msgid ""
@@ -1879,7 +1914,7 @@ msgstr ""
 
 #: ../framework.md:11
 msgid "Event driven"
-msgstr ""
+msgstr "Vođeno događajima"
 
 #: ../framework.md:13
 msgid ""
@@ -1900,7 +1935,6 @@ msgid "Transactional"
 msgstr "Transakcijski"
 
 #: ../framework.md:25
-#, fuzzy
 msgid ""
 "Gaphor is transactional, which means it keeps track of the functions it "
 "performs as a series of transactions. The transactions work by sending an"
@@ -1909,12 +1943,12 @@ msgid ""
 " the previous transactions so that a transaction can be reversed if the "
 "undo button is pressed."
 msgstr ""
-"Gaphor je [transakcijski](transaction.md), što znači da prati funkcije "
-"koje obavlja kao niz transakcija. Transakcije funkcioniraju tako da šalju"
-" događaj kada transakcija započne i šalju drugi događaj kada transakcija "
-"završi. To na primjer omogućuje upravljaču poništavanja da vodi dnevnik "
-"prethodnih transakcija tako da se transakcija može poništiti ako se "
-"pritisne gumb za poništavanje."
+"Gaphor je transakcijski, što znači da prati funkcije koje obavlja kao niz "
+"transakcija. Transakcije funkcioniraju tako da šalju događaj kada "
+"transakcija započne i šalju drugi događaj kada transakcija završi. To na "
+"primjer omogućuje upravljaču poništavanja da vodi dnevnik prethodnih "
+"transakcija tako da se transakcija može poništiti ako se pritisne gumb za "
+"poništavanje."
 
 #: ../framework.md:32
 msgid "Main Components"
@@ -1928,11 +1962,10 @@ msgid ""
 "Each session will load its own services defined as "
 "[gaphor.services](service_oriented.md)."
 msgstr ""
-"Glavni dio Gaphora koji se najprije izvršava zove se `Aplikacija`. Gaphor"
-" može imati više otvorenih modela u bilo kojem trenutku. Svaki model se "
-"čuva u `Sesiji`. Aktivna je samo jedna instanca aplikacije. Svaka će "
-"sesija učitati vlastite usluge definirane kao "
-"[gaphor.services](service_oriented.md)."
+"Glavni dio Gaphora koji se najprije izvršava zove se `Aplikacija`. Gaphor "
+"može imati više otvorenih modela u bilo kojem trenutku. Svaki model se čuva "
+"u `Sesiji`. Aktivna je samo jedna instanca aplikacije. Svaka će sesija "
+"učitati vlastite usluge definirane kao [gaphor.usluge](service_oriented.md)."
 
 #: ../framework.md:40
 msgid "The most notable services are:"
@@ -1957,17 +1990,16 @@ msgid "element_factory"
 msgstr "element_factory"
 
 #: ../framework.md:50
-#, fuzzy
 msgid ""
 "The [data model](models/core) itself is maintained in the element factory"
 " ({obj}`~gaphor.core.modeling.ElementFactory`). This service is used to "
 "create model elements, as well as to lookup elements or query for a set "
 "of elements."
 msgstr ""
-"Sam [model podataka](models/core.md) održava se u tvornici elemenata "
-"(`gaphor.core.modeling.elementfactory`). Ova se usluga koristi za "
-"stvaranje elemenata modela, kao i za pregledvanje elemenata ili za "
-"traženje skupa elemenata."
+"Sam [model podataka](models/core) održava se u tvornici elemenata "
+"({obj}`~gaphor.core.modeling.ElementFactory`). Ova se usluga koristi za stvaranje "
+"elemenata modela, kao i za pregledvanje elemenata ili za traženje skupa "
+"elemenata."
 
 #: ../framework.md:54
 msgid "undo_manager"
@@ -2005,7 +2037,7 @@ msgstr "Učitavanje i spremanje modela vrši se putem ove usluge."
 
 #: ../gaphor-services.md:5
 msgid "Example: Gaphor services"
-msgstr ""
+msgstr "Primjer: Gaphor usluge"
 
 #: ../gaphor-services.md:7
 msgid ""
@@ -2073,7 +2105,7 @@ msgstr ""
 
 #: ../getting_started.md:9
 msgid "Enough talk, let's get started."
-msgstr ""
+msgstr "Dovoljno priče, započnimo."
 
 #: ../getting_started.md:11
 msgid ""
@@ -2081,6 +2113,9 @@ msgid ""
 "Website](https://gaphor.org/download). Gaphor can be installed on Linux "
 "(Flatpak), Windows, and macOS."
 msgstr ""
+"Instalacijske programe za Gaphor možeš pronaći na [Gaphor web stranici]"
+"(https://gaphor.org/download). Gaphor se može instalirati na Linux (Flatpak)"
+", Windows i macOS sustave."
 
 #: ../getting_started.md:14
 msgid ""
@@ -2091,20 +2126,20 @@ msgstr ""
 "otvorene modele i predloške modela."
 
 #: ../getting_started.md:17
-#, fuzzy
 msgid ""
 "![Gaphor's welcome screen showing recently opened models and model "
 "templates.](images/getting-started-greeter.png)"
-msgstr "![uvodni ekran](images/getting-started-greeter.png)"
+msgstr ""
+"![Uvodni ekran Gaphora koji prikazuje nedavno otvorene modele i predloške "
+"modela.](images/getting-started-greeter.png)"
 
 #: ../getting_started.md:17
-#, fuzzy
 msgid ""
 "Gaphor's welcome screen showing recently opened models and model "
 "templates."
 msgstr ""
-"Nakon pokretanja Gaphora, prikazuje se uvodni ekran. Prikazuje prethodno "
-"otvorene modele i predloške modela."
+"Uvodni ekran Gaphora koji prikazuje nedavno otvorene modele i predloške "
+"modela."
 
 #: ../getting_started.md:19
 msgid "You can select a template to get started."
@@ -2112,7 +2147,7 @@ msgstr "Počni izborom predloška."
 
 #: ../getting_started.md:21
 msgid "**Generic:** a blank model to start with"
-msgstr "**Generički:** prazni model"
+msgstr "**Generički:** prazni model za započinjanje"
 
 #: ../getting_started.md:22
 msgid ""
@@ -2139,13 +2174,12 @@ msgstr ""
 "za sigurnost i analizu pouzdanosti"
 
 #: ../getting_started.md:25
-#, fuzzy
 msgid ""
 "**C4 Model:** A template for *Context, Containers, Components, and Code* "
 "which is for lean modeling of software architecture"
 msgstr ""
-"**C4 Model:** Predložak za *Context, Containers, Components, and Code* "
-"koji služi za jednostavno modeliranje softverske arhitekture"
+"**C4 Model:** Predložak za *kontekst, kontejnere, komponente i kod* koji "
+"služi za jednostavno modeliranje softverske arhitekture"
 
 #: ../getting_started.md:27
 msgid "Once the model interface is loaded you'll see the modeling interface."
@@ -2156,10 +2190,14 @@ msgid ""
 "![The Gaphor main window, with numbers refering to parts of the "
 "UI.](images/getting-started-new-model.png)"
 msgstr ""
+"![Glavni prozor Gaphora s brojevima koji upućuju na dijelove korisničkog "
+"sučelja.](images/getting-started-new-model.png)"
 
 #: ../getting_started.md:29
 msgid "The Gaphor main window, with numbers refering to parts of the UI."
 msgstr ""
+"Glavni prozor Gaphora s brojevima koji upućuju na dijelove korisničkog "
+"sučelja."
 
 #: ../getting_started.md:31
 msgid "The layout of the Gaphor interface is divided into four sections, namely:"
@@ -2180,7 +2218,7 @@ msgstr "Dijagrami"
 
 #: ../getting_started.md:37 ../getting_started.md:143
 msgid "Property Editor"
-msgstr "Uređivač svojstava"
+msgstr "Uređivač svojstva"
 
 #: ../getting_started.md:39
 msgid "Each section has its own specific function."
@@ -2294,13 +2332,12 @@ msgid "Relations"
 msgstr "Veze"
 
 #: ../getting_started.md:107
-#, fuzzy
 msgid ""
 "Relations are line-like items that form relationships between elements in"
 " the diagram. Each end of a relation is in one of two states:"
 msgstr ""
-"Veze su linijski elementi koji tvore odnose između elemenata u dijagramu."
-" Svaki kraj veze se nalazi u jednom od dva stanja:"
+"Veze su linijski elementi koji tvore odnose između elemenata u dijagramu. "
+"Svaki kraj veze se nalazi u jednom od dva stanja:"
 
 #: ../getting_started.md:110
 msgid "Connected to an element and the handle turns red"
@@ -2330,7 +2367,6 @@ msgid ""
 msgstr ""
 
 #: ../getting_started.md:123
-#, fuzzy
 msgid "Copy and Paste"
 msgstr "Kopiraj i umetni"
 
@@ -2381,14 +2417,20 @@ msgid ""
 " the ![Icon for showing and hiding the Property Editor.](images/sidebar-"
 "show-right-symbolic.svg) icon in the header bar."
 msgstr ""
+"Uređivač svojstva se nalazi na desnoj strani dijagrama. Kada na dijagramu "
+"nije odabran nijedan element, prikazuje neke savjete i trikove. Kada je "
+"jedan element odabran na dijagramu, on sadrži detalje o elementu poput "
+"imena, atributa i stereotipa. Može se otvoriti pomoću <kbd>F9</kbd> i ikone !"
+"[Ikona za prikaz i skrivanje uređivača svojstva.]"
+"(images/sidebar-show-right-symbolic.svg) u traci zaglavlja."
 
 #: ../getting_started.md:145
 msgid "Icon for showing and hiding the Property Editor."
-msgstr ""
+msgstr "Ikona za prikazivanje i skrivanje uređivača svojstva."
 
 #: ../getting_started.md:152
 msgid "The properties that are shown depend on the item that is selected."
-msgstr ""
+msgstr "Prikazana svojstva ovise o odabranom elementu."
 
 #: ../getting_started.md:154
 msgid "Model Preferences"
@@ -2400,10 +2442,13 @@ msgid ""
 " with wrench icon for model specific configuration.](images/document-"
 "properties-symbolic.svg) button."
 msgstr ""
+"Uređivač svojstva također sadrži postavke modela: Klikni gumb !"
+"[Dokument s ikonom alata za konfiguraciju modela.]"
+"(images/document-properties-symbolic.svg)."
 
 #: ../getting_started.md:156
 msgid "Document with wrench icon for model specific configuration."
-msgstr ""
+msgstr "Dokument s ikonom alata za konfiguraciju modela."
 
 #: ../getting_started.md:159
 msgid "Reset Tool Automatically"
@@ -2419,7 +2464,7 @@ msgstr ""
 
 #: ../getting_started.md:163
 msgid "Remove Unused Elements"
-msgstr ""
+msgstr "Ukloni nekorištene elemente"
 
 #: ../getting_started.md:165
 msgid ""
@@ -2438,22 +2483,29 @@ msgid ""
 "how it is shown in the diagram. The diagram language setting is saved as "
 "part of the model and defaults to English."
 msgstr ""
+"Modifikator jezika dijagrama primjenjiv je samo na učitani model i način na "
+"koji je prikazan u dijagramu. Postavka jezika dijagrama sprema se kao dio "
+"modela i standardno je postavljena na engleski jezik."
 
 #: ../getting_started.md:171
 msgid "The UI language of Gaphor is controlled by the operating system."
-msgstr ""
+msgstr "Jezikom korisničkog sučelja Gaphora upravlja operacijski sustav."
 
 #: ../getting_started.md:174
 msgid ""
 "Gaphor considers the ``LANG`` environment variable on Linux, Windows and "
 "macOS."
 msgstr ""
+"Gaphor uzima u obzir ``LANG`` varijablu okruženja na Linux, Windows i macOS "
+"sustavima."
 
 #: ../getting_started.md:176
 msgid ""
 "On Windows and macOS it can be set independently of the operating "
 "system's language settings to a different language."
 msgstr ""
+"Na operacijskim sustavima Windows i macOS jezik se može odabrati neovisno o "
+"postavkama jezika sustava."
 
 #: ../getting_started.md:178
 msgid "Style Sheet"
@@ -2464,6 +2516,8 @@ msgid ""
 "The [style sheet](style_sheets) allows to change the visual appearance of"
 " diagrams and model elements."
 msgstr ""
+"[Stilski predložak](style_sheets) omogućuje mijenjanje vizualnog izgleda "
+"dijagrama i elemenata modela."
 
 #: ../index.rst:29
 msgid "Getting Started"
@@ -2474,9 +2528,8 @@ msgid "Features"
 msgstr "Značajke"
 
 #: ../index.rst:49
-#, fuzzy
 msgid "Development"
-msgstr "Element"
+msgstr "Razvoj"
 
 #: ../index.rst:59
 msgid "Modeling languages"
@@ -2505,12 +2558,17 @@ msgid ""
 " a fully-compliant UML 2 data model, so it is much more than a picture "
 "drawing tool."
 msgstr ""
+"Gaphor je UML i SysML program za modeliranje napisana u Pythonu. Izrađen je "
+"kao jednostavan i moćan program. Gaphor implementira potpuno sukladan UML 2 "
+"model podataka, tako da je program više od običnog alata za crtanje slika."
 
 #: ../index.rst:13
 msgid ""
 "You can use Gaphor to quickly visualize different aspects of a system as "
 "well as create complete, highly complex models."
 msgstr ""
+"Koristi Gaphor za brzo vizualiziranje različitih aspekata sustava, kao i za "
+"stvaranje potpunih, vrlo složenih modela."
 
 #: ../index.rst:18
 msgid ""
@@ -2519,10 +2577,14 @@ msgid ""
 "The code and issue tracker can be found on `GitHub "
 "<https://github.com/gaphor/gaphor>`_."
 msgstr ""
+"Gaphor je 100 % otvorenog koda te je dostupan pod prijateljskom `Apache 2 "
+"license <https://github.com/gaphor/gaphor/blob/main/LICENSES/Apache-2.0.txt>`"
+"_. Kod i alat za praćenje problema mogu se pronaći na `GitHub <https://"
+"github.com/gaphor/gaphor>`_."
 
 #: ../index.rst:21
 msgid "What are you waiting for? :doc:`Let's get started <getting_started>`!"
-msgstr ""
+msgstr "Što čekaš? :doc:`Počnimo <getting_started>`!"
 
 #: ../index.rst:23
 msgid ""
@@ -2538,18 +2600,17 @@ msgstr ""
 
 #: ../linux.md:1
 msgid "Gaphor on Linux"
-msgstr ""
+msgstr "Gaphor na Linuxu"
 
 #: ../linux.md:3
-#, fuzzy
 msgid ""
 "Gaphor can be installed as Flatpak on Linux, some distributions provide "
 "packages. Check out the [Gaphor download "
 "page](https://gaphor.org/download/#linux) for details."
 msgstr ""
-"Gaphor se može instalirati kao s našim instalaterom. Za detalje pogledaj "
-"[stranicu za preuzimanje "
-"Gaphora](https://gaphor.org/download.html#windows)."
+"Gaphor se može instalirati kao Flatpak na Linuxu, neke distribucije pružaju "
+"pakete. Za detalje pogledaj [stranicu za preuzimanje Gaphora](https://"
+"gaphor.org/download/#linux)."
 
 #: ../linux.md:7 ../macos.md:5 ../windows.md:7
 msgid ""
@@ -2565,23 +2626,23 @@ msgstr ""
 
 #: ../linux.md:11 ../macos.md:10 ../windows.md:11
 msgid "Development Environment"
-msgstr ""
+msgstr "Okruženje za razvoj"
 
 #: ../linux.md:13
 msgid "There are two ways to set up a development environment:"
-msgstr ""
+msgstr "Postoje dva načina za postavljanje okruženje za razvoj:"
 
 #: ../linux.md:15
 msgid "[GNOME Builder](#gnome-builder), ideal for “drive by” contributions."
-msgstr ""
+msgstr "[GNOME Builder](#gnome-builder), idealno za neredovite doprinose."
 
 #: ../linux.md:16
 msgid "[A local environment](#a-local-environment)."
-msgstr ""
+msgstr "[Lokalno okruženje](#a-local-environment)."
 
 #: ../linux.md:18
 msgid "GNOME Builder"
-msgstr ""
+msgstr "GNOME Builder"
 
 #: ../linux.md:20
 msgid ""
@@ -2594,7 +2655,7 @@ msgstr ""
 
 #: ../linux.md:25
 msgid "A Local Environment"
-msgstr ""
+msgstr "Lokalno okruženje"
 
 #: ../linux.md:27
 msgid ""
@@ -2771,7 +2832,7 @@ msgstr ""
 
 #: ../macos.md:12
 msgid "To set up a development environment with macOS:"
-msgstr ""
+msgstr "Za postavljanje okruženja za razvoj s macOS-om:"
 
 #: ../macos.md:13
 msgid "Install [Homebrew](https://brew.sh)"
@@ -2824,7 +2885,7 @@ msgstr ""
 
 #: ../merge_conflicts.md:1
 msgid "Resolve Merge Conflicts"
-msgstr ""
+msgstr "Riješi konflikte sjedinjavanja"
 
 #: ../merge_conflicts.md:3
 msgid ""
@@ -2855,10 +2916,14 @@ msgid ""
 "![A dialog showing options on how to deal with a merge conflict.](images"
 "/merge-dialog.png)"
 msgstr ""
+"![Dijalog koji prikazuje opcije za rješavanje konflikta sjedinjavanja "
+"(merge conflict).](images/merge-dialog.png)"
 
 #: ../merge_conflicts.md:15
 msgid "A dialog showing options on how to deal with a merge conflict."
 msgstr ""
+"Dijalog koji prikazuje opcije za rješavanje konflikta sjedinjavanja "
+"(merge conflict)."
 
 #: ../merge_conflicts.md:17
 msgid ""
@@ -2879,16 +2944,21 @@ msgid ""
 "The Merge Editor is shown on the right side, replacing the (normal) "
 "Property Editor."
 msgstr ""
+"Uređivač sjedinjavanja se prikazuje na desnoj strani i zamijenjuje (normalni)"
+" uređivač svojstva."
 
 #: ../merge_conflicts.md:26
 msgid ""
 "![The Gaphor main window, showing the merge editor on the right.](images"
 "/merge-conflict-window.png)"
 msgstr ""
+"![Glavni prozor Gaphora koji prikazuje uređivač sjedinjavanje na desnoj "
+"strani.](images/merge-conflict-window.png)"
 
 #: ../merge_conflicts.md:26
 msgid "The Gaphor main window, showing the merge editor on the right."
 msgstr ""
+"Glavni prozor Gaphora koji prikazuje uređivač sjedinjavanje na desnoj strani."
 
 #: ../merge_conflicts.md:28
 msgid ""
@@ -2917,7 +2987,7 @@ msgstr ""
 
 #: ../modeling_language.md:1
 msgid "Modeling Languages"
-msgstr ""
+msgstr "Jezici modeliranja"
 
 #: ../modeling_language.md:3
 msgid ""
@@ -3026,25 +3096,30 @@ msgid ""
 "[Editor pages](#property-editor-pages), shown in the collapsible pane on "
 "the right side"
 msgstr ""
+"[Stranice uređivača](#property-editor-pages), prikazane u sklopivoj ploči na "
+"desnoj strani"
 
 #: ../modeling_language.md:46
 msgid "[Instant (diagram) editor popups](#instant-diagram-editor-popups)"
 msgstr ""
+"[Trenutni skočni prozori uređivača (dijagrama)](#instant-diagram-editor-"
+"popups)"
 
 #: ../modeling_language.md:47
 msgid "Special diagram interactions"
-msgstr ""
+msgstr "Posebne interakcije u dijagramu"
 
 #: ../modeling_language.md:50
-#, fuzzy
 msgid "Modeling language"
-msgstr "Jezici modeliranja"
+msgstr "Jezik modeliranja"
 
 #: gaphor.abc.ModelingLanguage:1 of
 msgid ""
 "A model provider is a special service that provides an entrypoint to a "
 "model implementation, such as UML, SysML, RAAML."
 msgstr ""
+"Pružatelj modela je posebna usluga koja omogućuje pristup implementaciji "
+"modela, poput UML-a, SysML-a ili RAAML-a."
 
 #: gaphor.abc.ModelingLanguage.diagram_types:1 of
 msgid "Iterate diagram types."
@@ -3056,7 +3131,7 @@ msgstr ""
 
 #: gaphor.abc.ModelingLanguage.lookup_element:1 of
 msgid "Look up a model element type by (class) name."
-msgstr ""
+msgstr "Pretraži vrstu elementa modela prema imenu (klase)."
 
 #: gaphor.abc.ModelingLanguage.lookup_element:3 of
 msgid ""
@@ -3184,9 +3259,8 @@ msgid "Get item connected to a handle."
 msgstr ""
 
 #: ../modeling_language.md:87
-#, fuzzy
 msgid "Format and parse"
-msgstr "Kopiraj i umetni"
+msgstr "Formatiraj i obradi"
 
 #: ../modeling_language.md:89
 msgid ""
@@ -3319,7 +3393,7 @@ msgstr ""
 
 #: ../modeling_language.md:191
 msgid "Dropping"
-msgstr ""
+msgstr "Ispuštanje"
 
 #: ../modeling_language.md:193
 msgid ""
@@ -3351,11 +3425,11 @@ msgstr ""
 
 #: ../modeling_language.md:209
 msgid "Automated model cleanup"
-msgstr ""
+msgstr "Automatsko čišćenje modela"
 
 #: ../modeling_language.md:211
 msgid "Gaphor wants to keep the model in sync with the diagrams."
-msgstr ""
+msgstr "Gaphor želi održati model sinkroniziran s dijagramima."
 
 #: ../modeling_language.md:213
 msgid ""
@@ -3368,9 +3442,8 @@ msgid "Determine if a model element can safely be removed."
 msgstr ""
 
 #: ../modeling_language.md:220
-#, fuzzy
 msgid "Property Editor pages"
-msgstr "Uređivač svojstava"
+msgstr "Stranice uređivača svojstva"
 
 #: ../modeling_language.md:222
 msgid ""
@@ -3397,7 +3470,7 @@ msgstr ""
 
 #: ../modeling_language.md:232
 msgid "Instant (diagram) editor popups"
-msgstr ""
+msgstr "Trenutni skočni prozori uređivača (dijagrama)"
 
 #: ../modeling_language.md:234
 msgid ""
@@ -3424,7 +3497,6 @@ msgid ""
 msgstr ""
 
 #: ../models/c4model.md:1
-#, fuzzy
 msgid "The C4 Model"
 msgstr "C4 model"
 
@@ -3433,10 +3505,12 @@ msgid ""
 "The [C4 model](https://c4model.com/) is a simple visual language to "
 "describe the static structure of a software system."
 msgstr ""
+"[C4 model](https://c4model.com/) je jednostavan vizualni jezik za opis "
+"statičke strukture softverskog sustava."
 
 #: ../models/c4model.md:5
 msgid "It’s based on the [UML](uml.md) language."
-msgstr ""
+msgstr "Zasniva se na [UML](uml.md) jeziku."
 
 #: ../models/core.rst:2
 msgid "Modeling Language Core"
@@ -3554,17 +3628,17 @@ msgid "This example is purely illustrative:"
 msgstr ""
 
 #: ../models/core.rst:53
-#, fuzzy
 msgid "Loading and saving"
-msgstr "Crtanje i razmaci"
+msgstr "Učitavanje i spremanje"
 
 #: gaphor.core.modeling.base.Base.load:1 of
 msgid "Loads value in name."
-msgstr ""
+msgstr "Učitava vrijednost u ime."
 
 #: gaphor.core.modeling.base.Base.load:3 of
 msgid "Make sure that after all elements are loaded, postload() should be called."
 msgstr ""
+"Osiguraj da se nakon učitavanja svih elemenata pozove metoda postload()."
 
 #: gaphor.core.modeling.base.Base.postload:1 of
 msgid "Fix up the odds and ends."
@@ -3706,11 +3780,11 @@ msgstr ""
 
 #: ../models/core.rst:99
 msgid "Protocols"
-msgstr ""
+msgstr "Protokoli"
 
 #: ../models/core.rst:105
 msgid "Create a new element in the repository."
-msgstr ""
+msgstr "Stvori novi element u repozitoriju."
 
 #: ../models/core.rst:109
 msgid "Select elements from the repository that fulfill ``expression``."
@@ -3722,11 +3796,11 @@ msgstr ""
 
 #: ../models/core.rst:119
 msgid "Select all elements from the repository."
-msgstr ""
+msgstr "Odaberi sve elemente iz repozitorija."
 
 #: ../models/core.rst:123
 msgid "Get an element by id from the repository."
-msgstr ""
+msgstr "Dohvati element po ID-u iz repozitorija."
 
 #: ../models/core.rst:125
 msgid "Returns :const:`None` if no such element exists."
@@ -3750,7 +3824,7 @@ msgstr ""
 
 #: ../models/core_changeset.md:1
 msgid "Change Sets"
-msgstr ""
+msgstr "Skupovi promjena"
 
 #: ../models/core_changeset.md:3
 msgid ""
@@ -3760,20 +3834,20 @@ msgid ""
 msgstr ""
 
 #: ../models/core_services.rst:2
-#, fuzzy
 msgid "Core Services"
-msgstr "Usluge"
+msgstr "Osnovne usluge"
 
 #: ../models/core_services.rst:4
 msgid ""
 "here you can find the API for services that are related to model creation"
 " and model manipulation."
 msgstr ""
+"ovdje možeš pronaći API za usluge koje su povezane s izradom i manipulacijom "
+"modela."
 
 #: ../models/core_services.rst:9
-#, fuzzy
 msgid "Element Repository (/Factory)"
-msgstr "element_factory"
+msgstr "Repozitorij elemenata (/Factory)"
 
 #: gaphor.core.modeling.elementfactory.ElementFactory:1 of
 msgid "The ``ElementFactory`` is used as a central repository for a model."
@@ -3805,11 +3879,11 @@ msgstr ""
 
 #: gaphor.core.modeling.elementfactory.ElementFactory.select:6 of
 msgid "A type: return all elements of that type, or subtypes."
-msgstr ""
+msgstr "Jedna vrsta: vrati sve elemente te vrste ili njenih podvrsta."
 
 #: gaphor.core.modeling.elementfactory.ElementFactory.select:7 of
 msgid "An expression."
-msgstr "Izraz."
+msgstr "Jedan izraz."
 
 #: gaphor.core.modeling.elementfactory.ElementFactory.lselect:1 of
 msgid ""
@@ -3859,26 +3933,26 @@ msgid ""
 msgstr ""
 
 #: ../models/core_services.rst:33
-#, fuzzy
 msgid "Modeling Language"
-msgstr "Jezici modeliranja"
+msgstr "Jezik modeliranja"
 
 #: ../models/core_services.rst:35
 msgid ""
 "Information on how modeling languages are managed can be found "
 ":doc:`../modeling_language`."
 msgstr ""
+"Informacije o tome kako se upravlja jezicima za modeliranje mogu se pronaći "
+"putem :doc:`../modeling_language`."
 
 #: ../models/core_services.rst:39
-#, fuzzy
 msgid "Event Manager"
-msgstr "event_manager"
+msgstr "Upravljač događaja"
 
 #: ../models/core_services.rst:41
 msgid ""
 "The :doc:`../event_system` takes care of dispatches events throughout "
 "Gaphor."
-msgstr ""
+msgstr ":doc:`../event_system` se brine o distribuciji događaja unutar Gaphora."
 
 #: ../models/raaml.md:10 ../models/sysml.md:9 ../models/uml.md:15
 msgid "Packages"
@@ -3886,37 +3960,39 @@ msgstr "Paketi"
 
 #: ../models/raaml.md:1
 msgid "Risk Analysis and Assessment Modeling Language"
-msgstr ""
+msgstr "Jezik za modeliranje analize i procjene rizika (RAAML)"
 
 #: ../models/raaml.md:3
 msgid ""
 "Gaphor implements parts of the [RAAML 1.0 "
 "specification](https://www.omg.org/spec/RAAML)."
 msgstr ""
+"Gaphor implementira dijelove specifikacije [RAAML 1.0 specification](https://"
+"www.omg.org/spec/RAAML)."
 
 #: ../models/raaml/Core.rst:2
 msgid "Core"
-msgstr ""
+msgstr "Osnovno"
 
 #: ../models/raaml/Core.rst:5
 msgid "Core Library/Any Situation"
-msgstr ""
+msgstr "Osnovna biblioteka/Bilo koja situacija"
 
 #: ../models/raaml/Core.rst:11
 msgid "Core Profile/Controlling Measure"
-msgstr ""
+msgstr "Osnovni profil/Mjera kontrole"
 
 #: ../models/raaml/Core.rst:17
 msgid "Core Profile/Relevant To"
-msgstr ""
+msgstr "Osnovni profil/Relevantno za"
 
 #: ../models/raaml/Core.rst:23
 msgid "Core Profile/Situation"
-msgstr ""
+msgstr "Osnovni profil/Situacija"
 
 #: ../models/raaml/Core.rst:29
 msgid "Core Profile/Violates"
-msgstr ""
+msgstr "Osnovni profil/Krši"
 
 #: ../models/raaml/General.rst:2
 msgid "General"
@@ -3928,87 +4004,87 @@ msgstr "Osnovni događaj"
 
 #: ../models/raaml/General.rst:11
 msgid "General Concepts Library/Abstract Cause"
-msgstr ""
+msgstr "Biblioteka općih pojmova / Apstraktni uzrok"
 
 #: ../models/raaml/General.rst:17
 msgid "General Concepts Library/Abstract Effect"
-msgstr ""
+msgstr "Biblioteka općih pojmova / Apstraktni efekt"
 
 #: ../models/raaml/General.rst:23
 msgid "General Concepts Library/Abstract Event"
-msgstr ""
+msgstr "Biblioteka općih pojmova / Apstraktni događaj"
 
 #: ../models/raaml/General.rst:29
 msgid "General Concepts Library/Abstract Failure Mode"
-msgstr ""
+msgstr "Biblioteka općih pojmova / Modus apstraktnog kvara"
 
 #: ../models/raaml/General.rst:35
 msgid "General Concepts Library/Abstract Risk"
-msgstr ""
+msgstr "Biblioteka općih pojmova / Apstraktni rizik"
 
 #: ../models/raaml/General.rst:41
 msgid "General Concepts Library/Activation"
-msgstr ""
+msgstr "Biblioteka općih pojmova / Aktivacija"
 
 #: ../models/raaml/General.rst:47
 msgid "General Concepts Library/Cause"
-msgstr ""
+msgstr "Biblioteka općih pojmova / Uzrok"
 
 #: ../models/raaml/General.rst:53
 msgid "General Concepts Library/Dysfunctional Event"
-msgstr ""
+msgstr "Biblioteka općih pojmova / Disfunkcionalni efekt"
 
 #: ../models/raaml/General.rst:59
 msgid "General Concepts Library/Effect"
-msgstr ""
+msgstr "Biblioteka općih pojmova / Efekt"
 
 #: ../models/raaml/General.rst:65
 msgid "General Concepts Library/Error Propagation"
-msgstr ""
+msgstr "Biblioteka općih pojmova / Prijenos greške"
 
 #: ../models/raaml/General.rst:71
 msgid "General Concepts Library/Error Realization"
-msgstr ""
+msgstr "Biblioteka općih pojmova / Realizacija greške"
 
 #: ../models/raaml/General.rst:77
 msgid "General Concepts Library/Harm Potential"
-msgstr ""
+msgstr "Biblioteka općih pojmova / Potencijal štete"
 
 #: ../models/raaml/General.rst:83
 msgid "General Concepts Library/Hazard"
-msgstr ""
+msgstr "Biblioteka općih pojmova / Opasnost"
 
 #: ../models/raaml/General.rst:89
 msgid "General Concepts Library/Scenario"
-msgstr ""
+msgstr "Biblioteka općih pojmova / Scenarij"
 
 #: ../models/raaml/General.rst:95
 msgid "General Concepts Library/Undesired State"
-msgstr ""
+msgstr "Biblioteka općih pojmova / Neželjeno stanje"
 
 #: ../models/raaml/General.rst:101
 msgid "General Concepts Profile/Detection"
-msgstr ""
+msgstr "Profil općih pojmova / Detekcija"
 
 #: ../models/raaml/General.rst:107
 msgid "General Concepts Profile/Failure State"
-msgstr ""
+msgstr "Profil općih pojmova / Stanje kvara"
 
 #: ../models/raaml/General.rst:113
 msgid "General Concepts Profile/Mitigation"
-msgstr ""
+msgstr "Profil općih pojmova / Ublaživanje"
 
 #: ../models/raaml/General.rst:119
 msgid "General Concepts Profile/Prevention"
-msgstr ""
+msgstr "Profil općih pojmova / Prevencija"
 
 #: ../models/raaml/General.rst:125
 msgid "General Concepts Profile/Recommendation"
-msgstr ""
+msgstr "Profil općih pojmova / Preporuka"
 
 #: ../models/raaml/General.rst:131
 msgid "General Concepts Profile/Undeveloped"
-msgstr ""
+msgstr "Profil općih pojmova / Nerazvijeno"
 
 #: ../models/raaml/Methods.rst:2
 msgid "Methods"
@@ -4196,11 +4272,11 @@ msgstr "Dodjeljivanja"
 
 #: ../models/sysml/Allocations.rst:5
 msgid "AllocatedActivityPartition"
-msgstr ""
+msgstr "Dodijeljena particija aktivnosti"
 
 #: ../models/sysml/Allocations.rst:11
 msgid "Allocation"
-msgstr ""
+msgstr "Dodjela"
 
 #: ../models/sysml/Blocks.rst:2 ../style_sheets.md:329 ../style_sheets.md:330
 msgid "Blocks"
@@ -4208,11 +4284,11 @@ msgstr "Blokovi"
 
 #: ../models/sysml/Blocks.rst:8
 msgid "Adjunt and Classifier Behavior Properties"
-msgstr ""
+msgstr "Svojstva pomoćnih elemenata i ponašanje klasifikatora"
 
 #: ../models/sysml/Blocks.rst:14
 msgid "Bound References"
-msgstr ""
+msgstr "Povezane reference"
 
 #: ../models/sysml/Blocks.rst:20
 msgid "Connector Ends"
@@ -4224,15 +4300,15 @@ msgstr "Svojstva"
 
 #: ../models/sysml/Blocks.rst:32
 msgid "Property Paths"
-msgstr "Staze svojstava"
+msgstr "Staze svojstva"
 
 #: ../models/sysml/Blocks.rst:38
 msgid "Property-Specific Types"
-msgstr "Vrste svojstava"
+msgstr "Vrste specifičnih svojstva"
 
 #: ../models/sysml/Blocks.rst:44
 msgid "Property Strings"
-msgstr "Izrazi svojstava"
+msgstr "Izrazi svojstva"
 
 #: ../models/sysml/Blocks.rst:50
 msgid "Value Types"
@@ -4340,7 +4416,7 @@ msgstr "02. Vrijednosti"
 
 #: ../models/uml/02._Values.rst:5
 msgid "1. Literals"
-msgstr ""
+msgstr "1. Konstantne vrijednosti"
 
 #: ../models/uml/02._Values.rst:11
 msgid "2. Expressions"
@@ -4436,11 +4512,11 @@ msgstr "2. Događaji"
 
 #: ../models/uml/08._State_Machines.rst:2
 msgid "08. State Machines"
-msgstr ""
+msgstr "08. Automati konačnih stanja"
 
 #: ../models/uml/08._State_Machines.rst:5
 msgid "1. Behavior State Machines"
-msgstr ""
+msgstr "1. Ponašanje automata konačnih stanja"
 
 #: ../models/uml/09._Activities.rst:2
 msgid "09. Activities"
@@ -4452,15 +4528,15 @@ msgstr "1. Aktivnosti"
 
 #: ../models/uml/09._Activities.rst:11
 msgid "2. Control Nodes"
-msgstr ""
+msgstr "2. Kontrolni čvorovi"
 
 #: ../models/uml/09._Activities.rst:17
 msgid "3. Object Nodes"
-msgstr ""
+msgstr "3. Čvorovi objekta"
 
 #: ../models/uml/09._Activities.rst:23
 msgid "4. Executable Nodes"
-msgstr ""
+msgstr "4. Izvršni čvorovi"
 
 #: ../models/uml/09._Activities.rst:29
 msgid "5. Activity Groups"
@@ -4476,11 +4552,11 @@ msgstr "1. Radnje"
 
 #: ../models/uml/10._Actions.rst:11
 msgid "2. Invocation Actions"
-msgstr ""
+msgstr "2. Pozivne radnje"
 
 #: ../models/uml/10._Actions.rst:17
 msgid "7. Structural Feature Actions"
-msgstr ""
+msgstr "7. Radnje strukturne značajke"
 
 #: ../models/uml/10._Actions.rst:23
 msgid "9. Accept Event Actions"
@@ -4496,7 +4572,7 @@ msgstr "1. Interakcije"
 
 #: ../models/uml/11._Interactions.rst:11
 msgid "2. Lifelines"
-msgstr ""
+msgstr "2. Linije života"
 
 #: ../models/uml/11._Interactions.rst:17
 msgid "3. Messages"
@@ -4512,15 +4588,15 @@ msgstr "12. Slučajevi primjene"
 
 #: ../models/uml/12._Use_Cases.rst:5
 msgid "UseCases"
-msgstr ""
+msgstr "Slučajevi primjene"
 
 #: ../models/uml/13._Deployments.rst:2
 msgid "13. Deployments"
-msgstr ""
+msgstr "13. Raspoređivanja"
 
 #: ../models/uml/13._Deployments.rst:5
 msgid "1. Deployments"
-msgstr ""
+msgstr "1. Raspoređivanja"
 
 #: ../models/uml/13._Deployments.rst:11
 msgid "2. Artifacts"
@@ -4544,7 +4620,7 @@ msgstr "1. Dijagrami"
 
 #: ../models/uml/A._Gaphor_Specific_Constructs.rst:11
 msgid "2. Stereotype Applications"
-msgstr ""
+msgstr "2. Primjene stereotipova"
 
 #: ../models/uml/B._Gaphor_Profile.rst:2
 msgid "B. Gaphor Profile"
@@ -4555,18 +4631,20 @@ msgid ""
 "In order to provide extra information to the diagram elements (mainly "
 "association ends), the Gaphor model has been extended with stereotypes."
 msgstr ""
+"Kako bi se dijagramskim elementima (uglavnom krajevima veza) pružile dodatne "
+"informacije, Gaphor model je proširen sa stereotipovima."
 
 #: ../plugins.md:1
 msgid "Plugins"
-msgstr ""
+msgstr "Dodaci"
 
 #: ../plugins.md:4
 msgid "Plugins is an experimental feature! The API may change."
-msgstr ""
+msgstr "Dodaci su eksperimentalna značajka! API se može promijeniti."
 
 #: ../plugins.md:6
 msgid "We welcome you to try and provide your feedback."
-msgstr ""
+msgstr "Pozivamo te da isprobaš i pošalješ povratne informacije."
 
 #: ../plugins.md:9
 msgid ""
@@ -4575,30 +4653,36 @@ msgid ""
 "can be helpful if you install the binary distributions available on the "
 "[download page](https://gaphor.org/download/)."
 msgstr ""
+"Dodaci omogućuju proširenje funkcionalnosti Gaphora izvan mogućnosti koje "
+"nudi standardna distribucija. Posebno su korisni ako koristiš binarne "
+"distribucije dostupne na [stranici preuzimanja](https://gaphor.org/download/"
+")."
 
 #: ../plugins.md:12
 msgid "Gaphor can be extended via entry points in several ways:"
-msgstr ""
+msgstr "Gaphor se može proširiti putem ulaznih točaka na nekoliko načina:"
 
 #: ../plugins.md:14
 msgid "Application (global) services (`gaphor.appservices`)"
-msgstr ""
+msgstr "Usluge aplikacije (globalne) (`gaphor.appservices`)"
 
 #: ../plugins.md:15
 msgid "Session specific services (`gaphor.services`)"
-msgstr ""
+msgstr "Usluge specifične za sesiju (`gaphor.services`)"
 
 #: ../plugins.md:16
 msgid "[Modeling languages](modeling_language) (`gaphor.modelinglanguages`)"
-msgstr ""
+msgstr "[Jezici za modeliranje](modeling_language) (`gaphor.modelinglanguages`)"
 
 #: ../plugins.md:17
 msgid "(Sub)command line parsers (`gaphor.argparsers`)"
-msgstr ""
+msgstr "Obrađivači podnaredbi u naredbenom retku (`gaphor.argparsers`)"
 
 #: ../plugins.md:18
 msgid "Indirectly loaded modules (`gaphor.modules`), mainly for UI components"
 msgstr ""
+"Indirektno učitani moduli (`gaphor.modules`), uglavnom za komponente "
+"korisničkog sučelja"
 
 #: ../plugins.md:21
 msgid ""
@@ -4607,11 +4691,14 @@ msgid ""
 "changed by setting the environment variable `GAPHOR_PLUGIN_PATH` and "
 "point to a directory."
 msgstr ""
+"Standardno mjesto za dodatke je `$HOME/.local/gaphor/plugins-2` (`$USER/"
+".local/gaphor/plugins-2` na Windows sustavu). Ovo se mjesto može promijeniti "
+"postavljanjem varijable okruženja `GAPHOR_PLUGIN_PATH` i ukazivanjem na "
+"željenu mapu."
 
 #: ../plugins.md:25
-#, fuzzy
 msgid "Install a plugin"
-msgstr "Instalacija"
+msgstr "Instaliraj dodatak"
 
 #: ../plugins.md:27
 msgid ""
@@ -4654,7 +4741,7 @@ msgstr ""
 
 #: ../plugins.md:48
 msgid "Create your own plugin"
-msgstr ""
+msgstr "Stvori vlastiti dodatak"
 
 #: ../plugins.md:50
 msgid ""
@@ -4662,10 +4749,13 @@ msgid ""
 " Gaphor's [design principles](design_principles), [service oriented "
 "architecture](service_oriented), and [event driven framework](framework)."
 msgstr ""
+"Ako želiš napisati dodatak, upoznaj se s Gaphorovim [principima dizajna]"
+"(design_principles), [arhitekturom orijentiranom na usluge](service_oriented)"
+" i [frameworkom vođen događajima](framework)."
 
 #: ../plugins.md:54
 msgid "Example plugin"
-msgstr ""
+msgstr "Primjer dodatka"
 
 #: ../plugins.md:56
 msgid ""
@@ -4724,7 +4814,7 @@ msgstr ""
 
 #: ../plugins.md:108
 msgid "Plugin Development FAQ"
-msgstr ""
+msgstr "ČPP o razvoju dodataka"
 
 #: ../plugins.md:110
 msgid "How do I acceess gaphor services in my plugin?"
@@ -4746,12 +4836,11 @@ msgstr ""
 
 #: ../plugins.md:118
 msgid "Community Developed Plugins"
-msgstr ""
+msgstr "Razvijeni dodaci zajednice"
 
 #: ../plugins.md:120
-#, fuzzy
 msgid "Gaphor_Tools"
-msgstr "Gaphor na macOS-u"
+msgstr "Gaphor_Alati"
 
 #: ../plugins.md:121
 msgid "What does it do?"
@@ -4778,7 +4867,7 @@ msgstr ""
 
 #: ../scripting.md:5
 msgid "Jupyter and Scripting"
-msgstr ""
+msgstr "Jupyter i pisanje skripta"
 
 #: ../scripting.md:7
 msgid ""
@@ -4786,26 +4875,30 @@ msgid ""
 "interested in getting more out of your models by interacting with them "
 "through Python scripts and [Jupyter notebooks](https://jupyter.org/)."
 msgstr ""
+"Jedan od načina rada s modelima je putem grafičkog korisničkog sučelja (GUI)"
+". Međutim, možda će te zanimati kako još bolje koristiti svoje modele "
+"interakcijom s njima putem Python skripta i [Jupyter bilježnica](https://"
+"jupyter.org/)."
 
 #: ../scripting.md:11
 msgid "You can use scripts to:"
-msgstr ""
+msgstr "Skripte možeš koristiti za:"
 
 #: ../scripting.md:13
 msgid "Explore the model, check for (in)valid conditions."
-msgstr ""
+msgstr "Istraživanje modela, provjeru za (ne)važećim uvjetima."
 
 #: ../scripting.md:14
 msgid "Generate code, as is done for Gaphor’s data model."
-msgstr ""
+msgstr "Generiranje koda, kao što je učinjeno za Gaphor-ov model podataka."
 
 #: ../scripting.md:15
 msgid "Update a model from another source, like a CSV file."
-msgstr ""
+msgstr "Aktualiziranje modela iz jednog drugog izvora, poput CSV datoteke."
 
 #: ../scripting.md:17
 msgid "Since Gaphor is written in Python, it also functions as a library."
-msgstr ""
+msgstr "Budući da je Gaphor napisan u Pythonu, on funkcionira i kao biblioteka."
 
 #: ../scripting.md:19
 msgid "Getting started"
@@ -4904,7 +4997,7 @@ msgstr ""
 
 #: ../scripting.md:141
 msgid "Draw a diagram"
-msgstr ""
+msgstr "Crtaj dijagram"
 
 #: ../scripting.md:143
 msgid ""
@@ -4912,14 +5005,16 @@ msgid ""
 "requires a function. This behavior is similar to the [`diagram` "
 "directive](sphinx)."
 msgstr ""
+"Još jedna lijepa značajka je crtanje dijagrama. U ovom trenutku to zahtijeva "
+"funkciju. Ovo ponašanje je slično [`diagram` direktivi](sphinx)."
 
 #: ../scripting.md:154
 msgid "Create a diagram"
-msgstr ""
+msgstr "Stvori dijagram"
 
 #: ../scripting.md:156
 msgid "(Requires Gaphor 2.13)"
-msgstr ""
+msgstr "(Zahtijeva Gaphor 2.13)"
 
 #: ../scripting.md:158
 msgid ""
@@ -4943,7 +5038,7 @@ msgstr ""
 
 #: ../scripting.md:191
 msgid "Update a model"
-msgstr ""
+msgstr "Aktualiziraj model"
 
 #: ../scripting.md:193
 msgid ""
@@ -4970,9 +5065,8 @@ msgid "If you save the model, your changes are persisted:"
 msgstr ""
 
 #: ../scripting.md:229
-#, fuzzy
 msgid "Updating elements"
-msgstr "Elementi"
+msgstr "Aktualiziranje elemenata"
 
 #: ../scripting.md:231
 msgid ""
@@ -4982,9 +5076,8 @@ msgid ""
 msgstr ""
 
 #: ../scripting.md:244
-#, fuzzy
 msgid "Then start up the services we will use:"
-msgstr "Najistaknutije usluge su:"
+msgstr "Zatim pokreni usluge koje ćemo koristiti:"
 
 #: ../scripting.md:263
 msgid "and load in the model to the session"
@@ -5060,25 +5153,28 @@ msgid ""
 "Expanding on the information above the following snippetts show how to "
 "create requirements and interfaces."
 msgstr ""
+"Nadovezujući se na gore navedene informacije, sljedeći isječci prikazuju "
+"kako stvoriti zahtjeve i sučelja."
 
 #: ../scripting.md:311
 msgid "Requirements from text fields"
-msgstr ""
+msgstr "Zahtjevi iz tekstualnih polja"
 
 #: ../scripting.md:336
-#, fuzzy
 msgid "Interfaces from dictionaries"
-msgstr "Interakcije"
+msgstr "Sučelja iz rječnika"
 
 #: ../scripting.md:367
 msgid "Basic Validation"
-msgstr ""
+msgstr "Osnovna validacija"
 
 #: ../scripting.md:368
 msgid ""
 "Some simple validation checks can be run using a couple of small "
 "functions to select and evaluate elements."
 msgstr ""
+"Neke jednostavne provjere validacije mogu se izvršiti pomoću nekoliko malih "
+"funkcija za biranje i evaluiranje elemenata."
 
 #: ../scripting.md:392
 msgid "Here is another example:"
@@ -5183,7 +5279,7 @@ msgstr ""
 
 #: ../service_oriented.md:74
 msgid "Entry Points"
-msgstr ""
+msgstr "Ulazne točke"
 
 #: ../service_oriented.md:76
 msgid ""
@@ -5217,14 +5313,15 @@ msgid ""
 "Each service (and plugin) should implement the `gaphor.abc.Service` "
 "interface:"
 msgstr ""
+"Svaka usluga (i dodatak) treba implementirati `gaphor.abc.Service` sučelje:"
 
 #: gaphor.abc.Service:1 of
 msgid "Base interface for all services in Gaphor."
-msgstr ""
+msgstr "Osnovno sučelje za sve usluge u Gaphoru."
 
 #: gaphor.abc.Service.shutdown:1 of
 msgid "Shutdown the services, free resources."
-msgstr ""
+msgstr "Isključi usluge, oslobodi resurse."
 
 #: ../service_oriented.md:101
 msgid ""
@@ -5233,30 +5330,37 @@ msgid ""
 " interface are used to define windows and user interface functionality. A"
 " UI component should implement the `gaphor.ui.abc.UIComponent` interface:"
 msgstr ""
+"Još jedna specijaliziranija usluga koja također nasljeđuje "
+"`gaphor.abc.Service` je usluga komponente korisničkog sučelja. Usluge koje "
+"koriste ovo sučelje koriste se za definiranje prozora i funkcionalnosti "
+"korisničkog sučelja. Komponenta korisničkog sučelja treba implementirati "
+"`gaphor.ui.abc.UIComponent` sučelje:"
 
 #: gaphor.ui.abc.UIComponent:1 of
 msgid "A user interface component."
-msgstr ""
+msgstr "Komponenta korisničkog sučelja."
 
 #: gaphor.ui.abc.UIComponent.close:1 of
 msgid "Close the UI component."
-msgstr ""
+msgstr "Zatvori komponentu korisničkog sučelja."
 
 #: gaphor.ui.abc.UIComponent.close:3 of
 msgid "The component can decide to hide or destroy the UI components."
 msgstr ""
+"Komponenta može odlučiti hoće li sakriti ili uništiti komponente korisničkog "
+"sučelja."
 
 #: gaphor.ui.abc.UIComponent.open:1 of
 msgid "Create and display the UI components (windows)."
-msgstr ""
+msgstr "Stvori i prikaži komponente korisničkog sučelja (prozore)."
 
 #: gaphor.ui.abc.UIComponent.shutdown:1 of
 msgid "Shut down this component."
-msgstr ""
+msgstr "Isključi ovu komponentu."
 
 #: gaphor.ui.abc.UIComponent.shutdown:3 of
 msgid "It's not supposed to be opened again."
-msgstr ""
+msgstr "Ne bi se trebala ponovo otvoriti."
 
 #: ../service_oriented.md:111
 msgid ""
@@ -5274,7 +5378,7 @@ msgstr ""
 
 #: ../sphinx.rst:2
 msgid "Sphinx Extension"
-msgstr ""
+msgstr "Sphinx proširenje"
 
 #: ../sphinx.rst:4
 msgid ""
@@ -5355,7 +5459,7 @@ msgstr ""
 
 #: ../sphinx.rst:91
 msgid "Read the Docs"
-msgstr ""
+msgstr "Pročitaj dokumentaciju"
 
 #: ../sphinx.rst:93
 msgid ""
@@ -5369,7 +5473,7 @@ msgid "This is the ``.readthedocs.yaml`` file we use for Gaphor:"
 msgstr ""
 
 #: ../sphinx.rst:102
-msgid "``libgirepository1.0-dev`` is required to build PyGObject."
+msgid "``libgirepository-2.0-dev`` is required to build PyGObject."
 msgstr ""
 
 #: ../sphinx.rst:103
@@ -5464,14 +5568,16 @@ msgid ""
 "![The Gaphor main window showing a stereotype usage example.](images"
 "/stereotype-usage.png)"
 msgstr ""
+"![Glavni prozor Gaphora koji prikazuje primjer korištenja stereotipa.]"
+"(images/stereotype-usage.png)"
 
 #: ../stereotypes.md:38
 msgid "The Gaphor main window showing a stereotype usage example."
-msgstr ""
+msgstr "Glavni prozor Gaphora koji prikazuje primjer korištenja stereotipa."
 
 #: ../stereotypes.md:40
 msgid "Creating a profile"
-msgstr ""
+msgstr "Stvaranje profila"
 
 #: ../stereotypes.md:42
 msgid ""
@@ -5537,9 +5643,8 @@ msgid ""
 msgstr ""
 
 #: ../stereotypes.md:60
-#, fuzzy
 msgid "Styling Stereotypes"
-msgstr "Stereotipi"
+msgstr "Stiliziranje stereotipa"
 
 #: ../stereotypes.md:62
 msgid ""
@@ -5550,6 +5655,8 @@ msgstr ""
 #: ../stereotypes.md:77
 msgid "[Style Sheets](style_sheets) has more detail on how CSS works in Gaphor"
 msgstr ""
+"[Stilski predlošci](style_sheets) sadrže više detalja o tome kako CSS "
+"funkcionira u Gaphoru"
 
 #: ../storage.md:1
 msgid "File Format"
@@ -5580,7 +5687,7 @@ msgstr ""
 
 #: ../style_sheets.md:1
 msgid "Style Sheets"
-msgstr ""
+msgstr "Stilski predlošci"
 
 #: ../style_sheets.md:3
 msgid ""
@@ -5668,7 +5775,7 @@ msgstr ""
 
 #: ../style_sheets.md:79
 msgid "Supported selectors"
-msgstr ""
+msgstr "Podržani selektori"
 
 #: ../style_sheets.md:81
 msgid ""
@@ -5758,9 +5865,8 @@ msgid "A diagram with a name is \"draft\" or starts with \"draft-\"."
 msgstr ""
 
 #: ../style_sheets.md:96
-#, fuzzy
 msgid "``:focus``"
-msgstr "``class``"
+msgstr "``:focus``"
 
 #: ../style_sheets.md:96
 msgid "The focused item. Other pseudo classes are:"
@@ -5783,9 +5889,8 @@ msgid "``:disabled`` if an element is grayed out during handle movement"
 msgstr ""
 
 #: ../style_sheets.md:102
-#, fuzzy
 msgid "``:empty``"
-msgstr "``opacity``"
+msgstr "``:empty``"
 
 #: ../style_sheets.md:102
 msgid "A node containing no child nodes in the diagram."
@@ -5848,9 +5953,8 @@ msgid "E.g. ``:not([subject])``: Any item that has no \"subject\"."
 msgstr ""
 
 #: ../style_sheets.md:116
-#, fuzzy
 msgid "``::after``"
-msgstr "``datatype``"
+msgstr "``::after``"
 
 #: ../style_sheets.md:116
 msgid ""
@@ -5898,7 +6002,7 @@ msgid ""
 "complex style declarations, like the `font` property in HTML/CSS which "
 "can contain font family, size, weight."
 msgstr ""
-"Gaphor podržava podskup CSS svojstava i neka Gaphor specifična svojstva. "
+"Gaphor podržava podskup CSS svojstva i neka Gaphor specifična svojstva. "
 "Tumač stilske tablice je relativno jednostavan. Sve širine, visine i "
 "veličine mjere se u pikselima. Ne možeš koristiti složene deklaracije "
 "stilova poput HTML/CSS svojstva `font`, koje može sadržavati obitelj "
@@ -6039,11 +6143,11 @@ msgstr "``vertical-align``"
 
 #: ../style_sheets.md:174
 msgid "Vertical alignment for text."
-msgstr "Okomiti položaj teksta."
+msgstr "Okomito poravnanje za tekst."
 
 #: ../style_sheets.md:176
 msgid "Either ``top``, ``middle`` or ``bottom``."
-msgstr "``top``, ``middle`` or ``bottom``."
+msgstr "``top``, ``middle`` ili ``bottom``."
 
 #: ../style_sheets.md:177
 msgid "``vertical-spacing``"
@@ -6058,13 +6162,12 @@ msgid "Example: ``vertical-spacing: 4``."
 msgstr "Primjer: ``vertical-spacing: 4``."
 
 #: ../style_sheets.md:180
-#, fuzzy
 msgid "``white-space``"
-msgstr "``line-style``"
+msgstr "``white-space``"
 
 #: ../style_sheets.md:180
 msgid "Change the line wrapping behavior for text. *(inherited)*"
-msgstr ""
+msgstr "Promijeni ponašanje prijeloma retka za tekst. *(naslijeđeno)*"
 
 #: ../style_sheets.md:184
 msgid ""
@@ -6122,7 +6225,7 @@ msgstr "``line-style``"
 
 #: ../style_sheets.md:198
 msgid "Either ``normal`` or ``sloppy [factor]``."
-msgstr "``normal`` ili ``sloppy [factor]``."
+msgstr "``normal`` ili ``sloppy [faktor]``."
 
 #: ../style_sheets.md:199
 msgid "``line-width``"
@@ -6130,7 +6233,7 @@ msgstr "``line-width``"
 
 #: ../style_sheets.md:199
 msgid "Set the width for lines: ``line-width: 2``. *(inherited)*"
-msgstr "Postavi debljinu linija: ``line-width: 2``. *(naslijeđeno)*"
+msgstr "Postavi širinu za linije: ``line-width: 2``. *(naslijeđeno)*"
 
 #: ../style_sheets.md:200
 msgid "``min-height``"
@@ -6138,7 +6241,7 @@ msgstr "``min-height``"
 
 #: ../style_sheets.md:200
 msgid "Set minimal height for an item: ``min-height: 50``."
-msgstr "Postavi minimalnu visinu elementa: ``min-height: 50``."
+msgstr "Postavi minimalnu visinu za element: ``min-height: 50``."
 
 #: ../style_sheets.md:201
 msgid "``min-width``"
@@ -6146,17 +6249,15 @@ msgstr "``min-width``"
 
 #: ../style_sheets.md:201
 msgid "Set minimal width for an item: ``min-width: 100``."
-msgstr "Postavi minimalnu širinu elementa: ``min-width: 100``."
+msgstr "Postavi minimalnu širinu za element: ``min-width: 100``."
 
 #: ../style_sheets.md:202
-#, fuzzy
 msgid "``max-width``"
-msgstr "``min-width``"
+msgstr "``max-width``"
 
 #: ../style_sheets.md:202
-#, fuzzy
 msgid "Set maximum width (text fields only): ``max-width: 100``."
-msgstr "Postavi minimalnu širinu elementa: ``min-width: 100``."
+msgstr "Postavi maksimalnu širinu (samo tekstualna polja): ``max-width: 100``."
 
 #: ../style_sheets.md:203
 msgid "``padding``"
@@ -6191,26 +6292,24 @@ msgstr ""
 "linija se može odrediti faktorom u rasponu od -2 do 2."
 
 #: ../style_sheets.md:215
-#, fuzzy
 msgid "Pseudo elements"
-msgstr "Elementi"
+msgstr "Pseudoelementi"
 
 #: ../style_sheets.md:217
 msgid "Currently, only the `::after` pseudo element is supported."
-msgstr ""
+msgstr "Trenutačno je podržan samo pseudoelement `::after`."
 
 #: ../style_sheets.md:221
-#, fuzzy
 msgid "``content``"
-msgstr "``justify-content``"
+msgstr "``content``"
 
 #: ../style_sheets.md:221
 msgid "Extra content to be shown after a text."
-msgstr ""
+msgstr "Dodatni sadržaj koji će se prikazati nakon teksta."
 
 #: ../style_sheets.md:225
 msgid "Variables"
-msgstr ""
+msgstr "Varijable"
 
 #: ../style_sheets.md:227
 msgid ""
@@ -6218,38 +6317,45 @@ msgid ""
 "variables](https://developer.mozilla.org/en-"
 "US/docs/Web/CSS/Using_CSS_custom_properties) in your style sheets."
 msgstr ""
+"Gaphor 2.16.0 i novije verzije omogućuju korištenje [CSS varijabli](https://"
+"developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties) u "
+"tvojim stilskim predlošcima."
 
 #: ../style_sheets.md:229
 msgid ""
 "This allows you to define often used values in a more generic way. Think "
 "of things like line dash style and colors."
 msgstr ""
+"To omogućuje definiranje često korištenih vrijednosti na generičkiji način. "
+"Razmisli o stvarima poput stila i boja iscrtkane linije."
 
 #: ../style_sheets.md:232
 msgid "The `var()` function has some limitations:"
-msgstr ""
+msgstr "Funkcija `var()` ima neka ograničenja:"
 
 #: ../style_sheets.md:234
 msgid "Values can’t have a default value."
-msgstr ""
+msgstr "Vrijednosti ne mogu imati zadanu vrijednost."
 
 #: ../style_sheets.md:235
 msgid "Variables can’t have a variable as their value."
-msgstr ""
+msgstr "Varijable ne mogu imati varijablu kao vrijednost."
 
 #: ../style_sheets.md:237
 msgid "Example:"
-msgstr ""
+msgstr "Primjer:"
 
 #: ../style_sheets.md:250
 msgid ""
 "All diagrams have a white background. Sequence diagrams get a blue-ish "
 "background."
 msgstr ""
+"Svi dijagrami imaju bijelu pozadinu. Sekvencijski dijagrami dobivaju "
+"plavičastu pozadinu."
 
 #: ../style_sheets.md:252
 msgid "Media queries"
-msgstr ""
+msgstr "Upiti medija"
 
 #: ../style_sheets.md:254
 msgid ""
@@ -6259,10 +6365,15 @@ msgid ""
 "defined with `@media` queries. The official `prefers-color-scheme = dark`"
 " query is supported, as well as a more convenient `dark-mode`."
 msgstr ""
+"Gaphor podržava tamni i svijetli Modus od verzije 2.16.0. Tamne i svijetle "
+"sheme boja koriste se isključivo za uređivanje na ekranu. Prilikom izvoza "
+"slika primjenjuje se samo zadana shema boja. Sheme boja mogu se definirati "
+"putem `@media` upita. Podržan je službeni upit `prefers-color-scheme = dark` "
+"kao i praktičniji `dark-mode`."
 
 #: ../style_sheets.md:280
 msgid "Diagram styles"
-msgstr ""
+msgstr "Stilovi dijagrama"
 
 #: ../style_sheets.md:282
 msgid ""
@@ -6278,9 +6389,8 @@ msgid ""
 msgstr ""
 
 #: ../style_sheets.md:291
-#, fuzzy
 msgid "CSS model elements"
-msgstr "CSS element"
+msgstr "CSS elemenata modela"
 
 #: ../style_sheets.md:293
 msgid ""
@@ -6657,7 +6767,7 @@ msgstr ""
 
 #: ../style_sheets.md:472
 msgid "System Style Sheet"
-msgstr ""
+msgstr "Stilski predlošci sustava"
 
 #: ../undo.md:1
 msgid "Undo Manager"
@@ -6749,9 +6859,8 @@ msgid ""
 msgstr ""
 
 #: ../undo.md:44
-#, fuzzy
 msgid "Transaction API"
-msgstr "Transakcijski"
+msgstr "API za transakcije"
 
 #: ../undo.md:47
 msgid "You only require transactions if the undo manager is active."
@@ -6883,14 +6992,13 @@ msgid "Gaphor on Windows"
 msgstr "Gaphor na Windowsu"
 
 #: ../windows.md:3
-#, fuzzy
 msgid ""
 "Gaphor can be installed as with our installer. Check out the [Gaphor "
 "download page](https://gaphor.org/download#windows) for details."
 msgstr ""
-"Gaphor se može instalirati kao s našim instalaterom. Za detalje pogledaj "
-"[stranicu za preuzimanje "
-"Gaphora](https://gaphor.org/download.html#windows)."
+"Gaphor se može instalirati pomoću našeg instalacijskog programa. Za detalje "
+"pogledaj [stranicu za preuzimanje Gaphora](https://gaphor.org/"
+"download.html#windows)."
 
 #: ../windows.md:13
 msgid "WinGet"
@@ -6917,18 +7025,16 @@ msgid "Git"
 msgstr "Git"
 
 #: ../windows.md:23
-#, fuzzy
 msgid ""
 "To set up a development environment in Windows first install "
 "[Git](https://gitforwindows.org) by executing as an administrator:"
 msgstr ""
-"Za postavljanje razvojnog okruženja u sustavu Windows najprije instaliraj"
-" [Git](https://gitforwindows.org) kao administrator:"
+"Za postavljanje razvojnog okruženja u sustavu Windows najprije instaliraj "
+"[Git](https://gitforwindows.org) kao administrator:"
 
 #: ../windows.md:30
-#, fuzzy
 msgid "GTK and Python with Gvsbuild"
-msgstr "GTK i Python s gvsbuild"
+msgstr "GTK i Python s Gvsbuild"
 
 #: ../windows.md:32
 msgid ""
@@ -7205,9 +7311,8 @@ msgid "Get the most recent packages using:"
 msgstr ""
 
 #: ../windows.md:254
-#, fuzzy
 msgid "Install dependencies"
-msgstr "Instaliraj Gaphor ovisnosti"
+msgstr "Instaliraj ovisnosti"
 
 #: ../windows.md:256
 msgid "The following Gaphor dependencies are installable from anaconda:"
@@ -7259,9 +7364,8 @@ msgid "Then, in spyder, set 'gaphor' as your python interpreter"
 msgstr ""
 
 #: ../windows.md:281
-#, fuzzy
 msgid "Install Gaphor"
-msgstr "Instaliraj Graphviz"
+msgstr "Instaliraj Gaphor"
 
 #: ../windows.md:283
 msgid ""
@@ -7962,4 +8066,3 @@ msgstr ""
 
 #~ msgid "`Image properties`_ can also be applied:"
 #~ msgstr ""
-

@@ -9,11 +9,19 @@
  * See: https://gitlab.gnome.org/GNOME/gtk/-/issues/6255
  */
 
+:root {
+  font-size: 13pt;
+}
+
 .csd {
-    box-shadow: none;
-    border-radius: 0;
+  box-shadow: none;
+  border-radius: 0;
 }
 
 .csd:backdrop {
-    box-shadow: none;
+  box-shadow: none;
+}
+
+.monospace {
+  font-family: monospace;
 }

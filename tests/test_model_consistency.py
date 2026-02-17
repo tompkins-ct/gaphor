@@ -40,6 +40,7 @@ from hypothesis.stateful import (
 )
 from hypothesis.strategies import data, integers, lists, sampled_from
 
+import gaphor.storage as storage
 from gaphor import UML
 from gaphor.application import Session
 from gaphor.C4Model.toolbox import c4
@@ -60,7 +61,6 @@ from gaphor.diagram.presentation import LinePresentation
 from gaphor.diagram.support import get_diagram_item_metadata
 from gaphor.diagram.tests.fixtures import allow, connect, disconnect
 from gaphor.RAAML.toolbox import fta, stpa
-from gaphor.storage import storage
 from gaphor.SysML.toolbox import blocks, internal_blocks, requirements
 from gaphor.UML import diagramitems
 from gaphor.UML.toolbox import (
@@ -301,9 +301,9 @@ class ModelConsistency(RuleBasedStateMachine):
                     modeling_language=self.session.get_service("modeling_language"),
                 )
 
-            assert (
-                self.model.size() == new_model.size()
-            ), f"{self.model.lselect()} != {new_model.lselect()}"
+            assert self.model.size() == new_model.size(), (
+                f"{self.model.lselect()} != {new_model.lselect()}"
+            )
             assert {e.id for e in self.model} == {e.id for e in new_model}
         except Exception:
             with open("falsifying_model.gaphor", "w", encoding="utf") as out:

@@ -4,14 +4,14 @@ from __future__ import annotations
 
 import logging
 import tempfile
-from collections.abc import Callable
+from collections.abc import Awaitable, Callable
 from functools import partial
 from pathlib import Path
 
 from gi.repository import Adw, Gio, Gtk
 
+import gaphor.storage as storage
 from gaphor.abc import ActionProvider, Service
-from gaphor.asyncio import TaskOwner, response_from_adwaita_dialog, sleep
 from gaphor.babel import translate_model
 from gaphor.core import action, event_handler, gettext
 from gaphor.core.changeset.compare import compare
@@ -23,7 +23,6 @@ from gaphor.event import (
     SessionShutdown,
     SessionShutdownRequested,
 )
-from gaphor.storage import storage
 from gaphor.storage.mergeconflict import split_ours_and_theirs
 from gaphor.storage.parser import MergeConflictDetected
 from gaphor.ui.errordialog import error_dialog
@@ -54,7 +53,7 @@ def error_message(e):
     ).format(exc=str(e))
 
 
-class FileManager(Service, ActionProvider, TaskOwner):
+class FileManager(Service, ActionProvider):
     """The file service, responsible for loading and saving Gaphor models."""
 
     def __init__(self, event_manager, element_factory, modeling_language, main_window):
@@ -75,7 +74,6 @@ class FileManager(Service, ActionProvider, TaskOwner):
 
     def shutdown(self):
         """Called when shutting down the file manager service."""
-        self.cancel_background_task()
         self.event_manager.unsubscribe(self._on_session_shutdown_request)
         self.event_manager.unsubscribe(self._on_session_created)
 
@@ -126,15 +124,12 @@ class FileManager(Service, ActionProvider, TaskOwner):
         self.event_manager.handle(ModelReady(self, filename=filename))
 
     @action("file-reload")
-    def reload(self):
+    async def reload(self):
         if self.filename and self.filename.exists():
             self.element_factory.flush()
 
-            async def _reload(filename: Path):
-                await self.load(filename)
-                self.event_manager.handle(ModelReady(self))
-
-            self.create_background_task(_reload(self.filename))
+            await self.load(self.filename)
+            self.event_manager.handle(ModelReady(self))
 
     async def merge(
         self,
@@ -148,8 +143,8 @@ class FileManager(Service, ActionProvider, TaskOwner):
             parent=self.parent_window,
         )
 
-        def progress(percentage, completed=0):
-            status_window.progress(completed + percentage / 3)
+        async def progress(percentage, completed=0):
+            await status_window.progress(completed + percentage / 3)
 
         try:
             log.debug("Loading current model from %s", current_filename)
@@ -186,7 +181,7 @@ class FileManager(Service, ActionProvider, TaskOwner):
     async def _load_async(
         self,
         filename: Path,
-        progress: Callable[[int], None] | None = None,
+        progress: Callable[[float], Awaitable[None]] | None = None,
         element_factory=None,
     ):
         factory = element_factory or self.element_factory
@@ -198,8 +193,7 @@ class FileManager(Service, ActionProvider, TaskOwner):
                     self.modeling_language,
                 ):
                     if progress:
-                        progress(percentage)
-                    await sleep(0)
+                        await progress(percentage)
         except MergeConflictDetected:
             self.filename = None
             await self.resolve_merge_conflict(filename)
@@ -214,7 +208,7 @@ class FileManager(Service, ActionProvider, TaskOwner):
                 ),
                 window=self.parent_window,
             )
-            self.event_manager.handle(SessionShutdown())
+            self.event_manager.handle(SessionShutdown(quitting=False))
 
     async def resolve_merge_conflict(self, filename: Path):
         temp_dir = tempfile.TemporaryDirectory()
@@ -233,7 +227,7 @@ class FileManager(Service, ActionProvider, TaskOwner):
         if split:
             answer = await resolve_merge_conflict_dialog(self.parent_window)
             if answer == "cancel":
-                self.event_manager.handle(SessionShutdown())
+                self.event_manager.handle(SessionShutdown(quitting=False))
             elif answer == "current":
                 await self.load(current_filename)
             elif answer == "incoming":
@@ -258,7 +252,7 @@ class FileManager(Service, ActionProvider, TaskOwner):
                 ),
                 window=self.parent_window,
             )
-            self.event_manager.handle(SessionShutdown())
+            self.event_manager.handle(SessionShutdown(quitting=False))
 
     async def save(self, filename):
         """Save the current model to the specified file name.
@@ -286,8 +280,7 @@ class FileManager(Service, ActionProvider, TaskOwner):
             with filename.open("w", encoding="utf-8") as out:
                 for percentage in storage.save_generator(out, self.element_factory):
                     if status_window:
-                        status_window.progress(percentage)
-                    await sleep(0)
+                        await status_window.progress(percentage)
             self.event_manager.handle(ModelSaved(filename))
         except Exception as e:
             await error_dialog(
@@ -310,7 +303,7 @@ class FileManager(Service, ActionProvider, TaskOwner):
         return self.main_window.window if self.main_window else None
 
     @action(name="file-save", shortcut="<Primary>s")
-    def action_save(self):
+    async def action_save(self):
         """Save the file. Depending on if there is a file name, either perform
         the save directly or present the user with a save dialog box.
 
@@ -318,42 +311,39 @@ class FileManager(Service, ActionProvider, TaskOwner):
         """
 
         if filename := self.filename:
-            self.create_background_task(self.save(filename))
+            await self.save(filename)
         else:
-            self.action_save_as()
+            await self._save_as()
 
     @action(name="file-save-as", shortcut="<Primary><Shift>s")
-    def action_save_as(self):
+    async def action_save_as(self):
         """Save the model in the element_factory by allowing the user to select
         a file name."""
+        await self._save_as()
 
-        async def save_as():
-            filename = await save_file_dialog(
-                gettext("Save Gaphor Model As"),
-                self.filename or Path(gettext("New Model")).with_suffix(".gaphor"),
-                parent=self.parent_window,
-                filters=GAPHOR_FILTER,
-            )
-            await self.save(filename)
-
-        self.create_background_task(save_as())
+    async def _save_as(self):
+        filename = await save_file_dialog(
+            gettext("Save Gaphor Model As"),
+            self.filename or Path(gettext("New Model")).with_suffix(DEFAULT_EXT),
+            parent=self.parent_window,
+            filters=GAPHOR_FILTER,
+        )
+        await self.save(filename)
 
     @event_handler(SessionCreated)
-    def _on_session_created(self, event: SessionCreated) -> None:
+    async def _on_session_created(self, event: SessionCreated) -> None:
         if event.filename:
-
-            async def _load(filename: Path):
-                await self.load(filename)
-                self.event_manager.handle(ModelReady(self))
-
-            self.create_background_task(_load(event.filename))
+            await self.load(event.filename)
+            self.event_manager.handle(ModelReady(self))
         elif event.template:
             self.load_template(event.template)
         else:
             self.event_manager.handle(ModelReady(self, filename=event.filename))
 
     @event_handler(SessionShutdownRequested)
-    def _on_session_shutdown_request(self, event: SessionShutdownRequested) -> None:
+    async def _on_session_shutdown_request(
+        self, event: SessionShutdownRequested
+    ) -> None:
         """Ask user to close window if the model has changed.
 
         The user is asked to either discard the changes, keep the
@@ -361,9 +351,9 @@ class FileManager(Service, ActionProvider, TaskOwner):
         """
 
         def confirm_shutdown():
-            self.event_manager.handle(SessionShutdown())
+            self.event_manager.handle(SessionShutdown(quitting=event.quitting))
 
-        async def save_or_discard_changes():
+        if self.main_window.model_changed:
             answer = await save_changes_before_close_dialog(self.parent_window)
             if answer == "save":
                 if filename := self.filename:
@@ -373,7 +363,7 @@ class FileManager(Service, ActionProvider, TaskOwner):
                     filename = await save_file_dialog(
                         gettext("Save Gaphor Model As"),
                         self.filename
-                        or Path(gettext("New Model")).with_suffix(".gaphor"),
+                        or Path(gettext("New Model")).with_suffix(DEFAULT_EXT),
                         parent=self.parent_window,
                         filters=GAPHOR_FILTER,
                     )
@@ -382,9 +372,6 @@ class FileManager(Service, ActionProvider, TaskOwner):
                         confirm_shutdown()
             elif answer == "discard":
                 confirm_shutdown()
-
-        if self.main_window.model_changed:
-            self.create_background_task(save_or_discard_changes())
         else:
             confirm_shutdown()
 
@@ -402,7 +389,7 @@ async def resolve_merge_conflict_dialog(window: Gtk.Window) -> str:
     dialog.add_response("incoming", gettext("Open Incoming"))
     dialog.set_close_response("cancel")
 
-    return await response_from_adwaita_dialog(dialog, window)
+    return str(await dialog.choose(window))
 
 
 async def save_changes_before_close_dialog(window: Gtk.Window) -> str:
@@ -419,4 +406,6 @@ async def save_changes_before_close_dialog(window: Gtk.Window) -> str:
     dialog.set_default_response("save")
     dialog.set_close_response("cancel")
 
-    return await response_from_adwaita_dialog(dialog, window)
+    window.present()
+
+    return str(await dialog.choose(window))

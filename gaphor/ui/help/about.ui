@@ -2,8 +2,7 @@
 <interface>
   <requires lib="gtk" version="4.0"/>
   <requires lib="adw" version="1.2"/>
-  <object class="AdwAboutWindow" id="about">
-    <property name="modal">true</property>
+  <object class="AdwAboutDialog" id="about">
     <property name="application-name">Gaphor</property>
     <property name="application-icon">org.gaphor.Gaphor</property>
     <property name="developer-name">Arjan Molenaar and Dan Yeaw</property>
@@ -23,12 +22,16 @@ Unless required by applicable law or agreed to in writing, software distributed 
       Amor Ali
       Arjan Molenaar
       Artur Wroblewski
+      Balló György
       Can Lehmann
       Christian Hoff
       Dan Yeaw
       Daniel Hulsed
+      Emmanuel Ferdman
       Enno Groeper
+      Feliks Weber
       Frank Vanbever
+      Francisco Gouveia
       Ikko Ashimine
       Jeroen Vloothuis
       Jonathan (vanillajonathan)
@@ -47,7 +50,9 @@ Unless required by applicable law or agreed to in writing, software distributed 
       clauniel
       cloud-erik
       mcdigregorio
-      peter88213</property>
+      nomisge
+      peter88213
+      mvinca</property>
     <property name="translator-credits">3fla1416 (fr)
       Albano Battistella (it)
       Antonin Delpeuch (fr)
@@ -64,35 +69,47 @@ Unless required by applicable law or agreed to in writing, software distributed 
       Jiri Grönroos (fi)
       Jordi Mallach (ca)
       Jose David M (es)
+      João Henrique (pt_BR)
       K.B.Dharun Krishna (ta)
+      Максим Горпиніч (uk)
       Michał Dominik (pl)
       Nathan Hadley (it)
+      Nekothegamer (it)
       Petalzu (zh_Hans)
       Peter Sabanov (ru)
       Philip Goto (nl)
+      RadekJedrzejczyk (pl)
+      Ricky Tigg (fi)
       Sabri Ünal (tr)
       Seong-ho Cho (ko)
+      TamilNeram (ta)
       Ygor Mutti (pt_BR)
       fu7mu4 (ja)
+      ichxorya (vi)
       jischebeck (de)
       jonvon (zh_Hans)
       lizhuoqi (zh_Hans)
       milotype (hr, de)
       ovari (hu)
       samscientist (ko)
+      stansz84 (fr)
       vanillajonathan (sv)
       vikdevelop (cs)
       zhangxinqiang (zh_Hans)
       Óscar Fernández Díaz (es)
-      Евгений Лежнин (ru)</property>
+      Евгений Лежнин (ru)
+      Zeyue (zh_Hans)
+    </property>
     <property name="designers">Arjan Molenaar
       Brage Fuglseth
       Dan Yeaw
+      Mareike Keil
       Tobias Bernard</property>
     <property name="documenters">Alexis Howells
       Arjan Molenaar
       Brandan Glendenning
       Dan Yeaw
+      DIYman
       Jens Pfeifle
       Mike Kidner
       Teun Hoevenaars

@@ -4,14 +4,14 @@ from __future__ import annotations
 
 import contextlib
 from collections.abc import Iterator, Sequence
-from typing import Generic, TypeVar, overload
+from typing import TypeVar, overload
 
 from gaphor.core.modeling.event import AssociationUpdated
 
 T = TypeVar("T")
 
 
-class collection(Generic[T]):
+class collection[T]:
     """Collection (set-like) for model elements' 1:n and n:m relationships."""
 
     def __init__(self, property, object, type: type[T]):
@@ -32,8 +32,8 @@ class collection(Generic[T]):
     @overload
     def __getitem__(self, key: int) -> T: ...
 
-    @overload  # Literal[slice(None, None, None)]
-    def __getitem__(self, key: slice) -> recurseproxy[T]: ...  # type: ignore[misc]
+    @overload
+    def __getitem__(self, key: slice[None, None, None]) -> recurseproxy[T]: ...
 
     def __getitem__(self, key):
         if key == _recurseproxy_trigger:
@@ -124,18 +124,18 @@ class collection(Generic[T]):
         except (IndexError, ValueError):
             return False
         else:
-            self.object.handle(AssociationUpdated(self.object, self.property))
+            self.property.handle(AssociationUpdated(self.object, self.property))
             return True
 
     def order(self, key):
         self.items.sort(key=key)
-        self.object.handle(AssociationUpdated(self.object, self.property))
+        self.property.handle(AssociationUpdated(self.object, self.property))
 
 
 _recurseproxy_trigger = slice(None, None, None)
 
 
-class recurseproxy(Generic[T]):
+class recurseproxy[T]:
     """Proxy object (helper) for the recusemixin.
 
     The proxy has limited capabilities compared to a real list (or set):
@@ -147,8 +147,8 @@ class recurseproxy(Generic[T]):
     def __init__(self, sequence: Sequence[T]):
         self.__sequence = sequence
 
-    def __getitem__(self, key: int | slice) -> T:  # type: ignore[misc]
-        return self.__sequence.__getitem__(key)  # type: ignore[return-value]
+    def __getitem__(self, key: int | slice[None, None, None]) -> T | Sequence[T]:
+        return self.__sequence.__getitem__(key)
 
     def __iter__(self):
         """Iterate over the items.

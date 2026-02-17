@@ -45,13 +45,19 @@ class TransitionPropertyPage(PropertyPageBase):
         builder = new_builder("transition-editor")
 
         guard = builder.get_object("guard")
-        if subject.guard:
-            guard.set_text(subject.guard.specification or "")
+        if subject.guard and isinstance(
+            subject.guard.specification, UML.LiteralSpecification
+        ):
+            guard.set_text(str(subject.guard.specification.value or ""))
 
         @handler_blocking(guard, "changed", self._on_guard_change)
         def guard_handler(event):
-            if event.element is subject.guard and guard.get_text() != event.new_value:
-                guard.set_text(event.new_value or "")
+            if (
+                event.element is subject.guard
+                and event.new_value
+                and guard.get_text() != event.new_value.value
+            ):
+                guard.set_text(str(event.new_value.value or ""))
 
         self.watcher.watch("guard[Constraint].specification", guard_handler)
 
@@ -86,21 +92,24 @@ class TransitionPropertyPage(PropertyPageBase):
 
     def _on_guard_change(self, entry):
         value = entry.get_text().strip()
-        with Transaction(self.event_manager):
+        with Transaction(self.event_manager, context="editing"):
             if not self.subject.guard:
                 self.subject.guard = self.subject.model.create(UML.Constraint)
-            self.subject.guard.specification = value
+            specification = self.subject.model.create(UML.LiteralString)
+            specification.value = value
+            specification.owningConstraint = self.subject.guard
+            self.subject.guard.specification = specification
 
     def _on_trigger_change(self, entry):
         value = entry.get_text().strip()
-        with Transaction(self.event_manager):
+        with Transaction(self.event_manager, context="editing"):
             if not self.subject.trigger:
                 self.subject.trigger = self.subject.model.create(UML.Behavior)
             self.subject.trigger.name = value
 
     def _on_action_change(self, entry):
         value = entry.get_text().strip()
-        with Transaction(self.event_manager):
+        with Transaction(self.event_manager, context="editing"):
             if not self.subject.action:
                 self.subject.action = self.subject.model.create(UML.Behavior)
             self.subject.action.name = value

@@ -6,6 +6,7 @@ from gaphas.item import SE
 
 from gaphor import UML
 from gaphor.diagram.diagramtoolbox import ToolDef, ToolSection, new_item_factory
+from gaphor.diagram.group import owner_of_type
 from gaphor.i18n import gettext, i18nize
 from gaphor.UML import diagramitems
 from gaphor.UML.recipes import owner_package
@@ -21,7 +22,7 @@ def activity_config(new_item, name=None):
 
     diagram = new_item.diagram
 
-    if owner_activity := UML.recipes.owner_of_type(diagram, UML.Activity):
+    if owner_activity := owner_of_type(diagram, UML.Activity):
         subject.activity = owner_activity
         return
 
@@ -57,7 +58,10 @@ def partition_config(new_item):
 
 def value_specification_action_config(new_item):
     activity_config(new_item, i18nize("ValueSpecificationAction"))
-    new_item.subject.value = "1"
+    value = new_item.subject.model.create(UML.LiteralString)
+    value.value = "1"
+    value.valueSpecificationAction = new_item.subject
+    new_item.subject.value = value
 
 
 actions = ToolSection(

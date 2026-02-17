@@ -1,6 +1,6 @@
 import pytest
 
-from gaphor.core.styling import compile_style_sheet
+from gaphor.core.styling import PrefersColorScheme, compile_style_sheet
 from gaphor.core.styling.selectors import SelectorError
 
 
@@ -10,20 +10,20 @@ class Node:
         name,
         parent=None,
         children=None,
+        classes=None,
         attributes=None,
         state=(),
         pseudo=None,
-        dark_mode=None,
     ):
         if attributes is None:
             attributes = {}
         self._name = name
         self._parent = parent
         self._children = children or []
+        self._classes = classes or []
         self._attributes = attributes
         self._state = state
         self.pseudo = pseudo
-        self.dark_mode = dark_mode
 
         if parent:
             parent._children.append(self)  # noqa: SLF001
@@ -38,6 +38,9 @@ class Node:
 
     def children(self):
         return iter(self._children)
+
+    def classes(self):
+        return self._classes
 
     def attribute(self, name):
         return self._attributes.get(name, "") if name in self._attributes else None
@@ -128,6 +131,14 @@ def test_select_sibling_combinator():
         Node("other", parent=Node("parent", children=[Node("previous")]))
     )
     assert not selector(Node("sibling"))
+
+
+def test_class():
+    css = ".element {}"
+
+    selector, _declarations = next(compile_style_sheet(css))
+
+    assert selector(Node("item", classes=["element"]))
 
 
 def test_attributes():
@@ -392,6 +403,7 @@ def test_has_and_is_selector():
 @pytest.mark.parametrize(
     "css",
     [
+        "@media { node { color: blue; } }",
         "@media(prefers-color-scheme = dark) { node { color: blue; } }",
         "@media prefers-color-scheme = dark { node { color: blue; } }",
         "@media(dark-mode) { node { color: blue; } }",
@@ -399,9 +411,11 @@ def test_has_and_is_selector():
     ],
 )
 def test_media_query(css):
-    selector, _declarations = next(compile_style_sheet(css))
+    selector, _declarations = next(
+        compile_style_sheet(css, prefers_color_scheme=PrefersColorScheme.DARK)
+    )
 
-    assert selector(Node("node", dark_mode=True))
+    assert selector(Node("node"))
 
 
 @pytest.mark.parametrize(

@@ -48,10 +48,10 @@ def test_parse_property_simple(factory):
     parse(a, "myattr")
     assert not a.isDerived
     assert "myattr" == a.name
-    assert a.typeValue is None, a.typeValue
-    assert a.lowerValue is None, a.lowerValue
-    assert a.upperValue is None, a.upperValue
-    assert a.defaultValue is None, a.defaultValue
+    assert a.typeValue is None
+    assert UML.recipes.get_multiplicity_lower_value(a) is None, a.lowerValue
+    assert UML.recipes.get_multiplicity_upper_value(a) is None, a.upperValue
+    assert a.defaultValue is None
 
 
 def test_parse_property_complex_1(factory):
@@ -63,9 +63,9 @@ def test_parse_property_complex_1(factory):
     assert a.isDerived
     assert "name" == a.name
     assert "str" == a.typeValue
-    assert "0" == a.lowerValue
-    assert "*" == a.upperValue
-    assert '"aap"' == a.defaultValue
+    assert UML.recipes.get_multiplicity_lower_value(a) == 0
+    assert UML.recipes.get_multiplicity_upper_value(a) == "*"
+    assert UML.recipes.get_default_value_as_string(a) == '"aap"'
     assert "and a note" == a.note
 
 
@@ -78,9 +78,9 @@ def test_parse_property_complex_2(factory):
     assert a.isDerived
     assert "name" == a.name
     assert "str" == a.typeValue
-    assert "0" == a.lowerValue
-    assert "*" == a.upperValue
-    assert '"aap bbq"' == a.defaultValue
+    assert UML.recipes.get_multiplicity_lower_value(a) == 0
+    assert UML.recipes.get_multiplicity_upper_value(a) == "*"
+    assert UML.recipes.get_default_value_as_string(a) == '"aap bbq"'
     assert "and a note" == a.note
 
 
@@ -100,7 +100,7 @@ def test_parse_property_with_default_value_and_note(factory):
     parse(a, "name=3 #note")
 
     assert "name" == a.name
-    assert "3" == a.defaultValue
+    assert "3" == UML.recipes.get_default_value_as_string(a)
     assert "note" == a.note
 
 
@@ -109,8 +109,8 @@ def test_parse_property_with_square_brackets(factory):
     parse(a, "attr[]")
 
     assert "attr" == a.name
-    assert "*" == a.upperValue
-    assert None is a.lowerValue
+    assert UML.recipes.get_multiplicity_lower_value(a) is None
+    assert UML.recipes.get_multiplicity_upper_value(a) == "*"
 
 
 @pytest.mark.parametrize(
@@ -168,8 +168,8 @@ def test_parse_association_end_multiplicity(factory):
     parse(p, "0..2 { tag }")
     assert p.name is None
     assert not p.typeValue
-    assert "0" == p.lowerValue
-    assert "2" == p.upperValue
+    assert UML.recipes.get_multiplicity_lower_value(p) == 0
+    assert UML.recipes.get_multiplicity_upper_value(p) == 2
     assert not p.defaultValue
 
 
@@ -181,8 +181,8 @@ def test_parse_association_end_multiplicity2(factory):
     parse(p, "0..2 { tag1, \ntag2}")
     assert p.name is None
     assert not p.typeValue
-    assert "0" == p.lowerValue
-    assert "2" == p.upperValue
+    assert UML.recipes.get_multiplicity_lower_value(p) == 0
+    assert UML.recipes.get_multiplicity_upper_value(p) == 2
     assert not p.defaultValue
 
 
@@ -196,8 +196,8 @@ def test_parse_association_end_visibility_multiplicity_no_name(text, factory):
     assert not p.name
     assert not p.typeValue
     assert p.visibility == "private"
-    assert "0" == p.lowerValue
-    assert "2" == p.upperValue
+    assert UML.recipes.get_multiplicity_lower_value(p) == 0
+    assert UML.recipes.get_multiplicity_upper_value(p) == 2
     assert not p.defaultValue
 
 
@@ -211,8 +211,8 @@ def test_parse_association_end_derived_end(factory):
     assert p.isDerived
     assert "end name" == p.name
     assert not p.typeValue
-    assert not p.lowerValue
-    assert "*" == p.upperValue
+    assert UML.recipes.get_multiplicity_lower_value(p) is None
+    assert UML.recipes.get_multiplicity_upper_value(p) == "*"
     assert not p.defaultValue
 
 
@@ -226,8 +226,8 @@ def test_parse_association_end_derived_end_without_name(factory):
     assert p.isDerived
     assert not p.name
     assert not p.typeValue
-    assert not p.lowerValue
-    assert "*" == p.upperValue
+    assert UML.recipes.get_multiplicity_lower_value(p) is None
+    assert UML.recipes.get_multiplicity_upper_value(p) == "*"
     assert not p.defaultValue
 
 
@@ -262,8 +262,8 @@ def test_parse_association_end_with_square_brackets(factory):
 
     parse(p, "end[]")
     assert "end" == p.name
-    assert "*" == p.upperValue
-    assert None is p.lowerValue
+    assert UML.recipes.get_multiplicity_lower_value(p) is None
+    assert UML.recipes.get_multiplicity_upper_value(p) == "*"
 
 
 def test_parse_operation(factory):
@@ -293,10 +293,10 @@ def test_parse_operation_2_params(factory):
     assert "float" == o.ownedParameter[0].typeValue
     assert "a" == o.ownedParameter[1].name
     assert "str" == o.ownedParameter[1].typeValue
-    assert o.ownedParameter[1].defaultValue is None
+    assert UML.recipes.get_default_value_as_string(o.ownedParameter[1]) is None
     assert "b" == o.ownedParameter[2].name
     assert "int" == o.ownedParameter[2].typeValue
-    assert "3" == o.ownedParameter[2].defaultValue
+    assert UML.recipes.get_default_value_as_string(o.ownedParameter[2]) == "3"
 
 
 def test_parse_operation_1_param(factory):
@@ -351,8 +351,8 @@ def test_parse_operation_with_square_brackets(factory):
     p = o.ownedParameter[0]
     assert "args" == p.name
     assert "string" == p.typeValue
-    assert "*" == p.upperValue
-    assert None is p.lowerValue
+    assert UML.recipes.get_multiplicity_lower_value(p) is None
+    assert UML.recipes.get_multiplicity_upper_value(p) == "*"
 
 
 def test_parse_operation_return_with_square_brackets(factory):
@@ -361,8 +361,8 @@ def test_parse_operation_return_with_square_brackets(factory):
     p = o.ownedParameter[0]
     assert "return" == p.direction
     assert "string" == p.typeValue
-    assert "*" == p.upperValue
-    assert None is p.lowerValue
+    assert UML.recipes.get_multiplicity_lower_value(p) is None
+    assert UML.recipes.get_multiplicity_upper_value(p) == "*"
 
 
 @pytest.mark.parametrize(

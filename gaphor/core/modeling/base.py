@@ -6,6 +6,7 @@ from __future__ import annotations
 import importlib
 import logging
 from collections.abc import Callable, Iterator
+from dataclasses import dataclass
 from functools import cache
 from typing import TYPE_CHECKING, Protocol, TypeVar, overload
 from uuid import uuid1
@@ -17,10 +18,12 @@ from gaphor.core.modeling.properties import relation_many, umlproperty
 if TYPE_CHECKING:
     from gaphor.core.modeling.diagram import Diagram
     from gaphor.core.modeling.presentation import Presentation
+    from gaphor.core.modeling.stylesheet import StyleSheet
 
 log = logging.getLogger(__name__)
 
 
+@dataclass
 class UnlinkEvent:
     """Used to tell event handlers this element should be unlinked.
 
@@ -28,23 +31,22 @@ class UnlinkEvent:
     `gaphor.core.modeling`.
     """
 
-    def __init__(self, element: Base, diagram: Diagram | None = None):
-        self.element = element
-        self.diagram = diagram
+    element: Base
+    diagram: Diagram | None = None
 
 
 Id = str
 
 
-def uuid_generator():
+def uuid_generator() -> Iterator[Id]:
     while True:
         yield str(uuid1())
 
 
-_generator: Iterator[str] = uuid_generator()
+_generator: Iterator[Id] = uuid_generator()
 
 
-def generate_id(generator=None):
+def generate_id(generator: Iterator[Id] | None = None) -> Id:
     global _generator
     if generator:
         _generator = generator
@@ -94,7 +96,7 @@ class Base:
         return self._model
 
     @classproperty
-    def __modeling_language__(cls):
+    def __modeling_language__(cls) -> str | None:
         """The modeling language this class belongs to."""
         if ml := _resolve_modeling_language(cls.__module__):
             return ml
@@ -112,12 +114,12 @@ class Base:
                 if isinstance(prop, umlprop):
                     yield prop
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"<{self.__class__.__module__}.{self.__class__.__name__} element {self._id}>"
 
     __repr__ = __str__
 
-    def __setattr__(self, key, value):
+    def __setattr__(self, key, value) -> None:
         if key.startswith("_") or hasattr(self.__class__, key):
             super().__setattr__(key, value)
         else:
@@ -166,7 +168,7 @@ class Base:
         log.debug("unlinking %s", self)
         self.handle(UnlinkEvent(self))
 
-    def handle(self, event) -> None:
+    def handle(self, event: object) -> None:
         """Propagate incoming events.
 
         This only works if the element has been created by an :class:`~gaphor.core.modeling.ElementFactory`
@@ -227,6 +229,9 @@ class RepositoryProtocol(Protocol):
 
     @overload
     def select(self, expression: None) -> Iterator[Base]: ...
+
+    @property
+    def style_sheet(self) -> StyleSheet | None: ...
 
     def lookup(self, id: str) -> Base | None: ...
 

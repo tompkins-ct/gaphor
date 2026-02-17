@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import functools
 import os
+from collections.abc import Sequence
 from pathlib import Path
 from typing import ClassVar
 
@@ -12,11 +13,11 @@ from docutils.parsers.rst.directives import images
 from sphinx.util import logging
 from sphinx.util.typing import OptionSpec
 
+import gaphor.storage as storage
 from gaphor.core.modeling import Diagram, ElementFactory
 from gaphor.diagram.export import save_pdf, save_svg
 from gaphor.i18n import gettext
 from gaphor.services.modelinglanguage import ModelingLanguageService
-from gaphor.storage import storage
 
 log = logging.getLogger(__name__)
 
@@ -53,10 +54,10 @@ class DiagramDirective(sphinx.util.docutils.SphinxDirective):
     final_argument_whitespace = True
     option_spec: ClassVar[OptionSpec] = {
         "model": directives.unchanged,
-        **images.Figure.option_spec,
+        **(images.Figure.option_spec or {}),
     }
 
-    def run(self) -> list[nodes.Node]:
+    def run(self) -> Sequence[nodes.Node]:
         name = self.arguments[0]
         model_name = self.options.pop("model", "default")
         model_file = self.config.gaphor_models.get(model_name)
@@ -108,7 +109,7 @@ class DiagramDirective(sphinx.util.docutils.SphinxDirective):
         for _ in Path(self.env.docname).parts[:-1]:
             outfile = Path("..") / outfile
 
-        return images.Figure(  # type: ignore[no-any-return]
+        return images.Figure(
             name="diagram/figure",
             arguments=[f"{outfile}.*"],
             options=self.options,

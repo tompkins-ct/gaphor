@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import enum
+
 import pytest
 
 from gaphor.core import event_handler
@@ -7,6 +9,7 @@ from gaphor.core.modeling import Base
 from gaphor.core.modeling.collection import collection
 from gaphor.core.modeling.event import AssociationUpdated
 from gaphor.core.modeling.properties import (
+    UnlimitedNatural,
     association,
     attribute,
     derived,
@@ -406,21 +409,21 @@ def test_association_subsettable_0_n(element_factory):
     assert a1 in c2.original
     assert a2 in c2.original
 
-    #     Superset {a1}, subset {a1}: subset {a2}, => superset {a2} ***POLICY***
+    #     Superset {a1}, subset {a1}: subset {a2}, => superset {a1, a2} ***POLICY***
     c3 = C()
     c3.subset = a1
     assert a1 in c3.original
     c3.subset.remove(a1)
     c3.subset = a2
-    assert len(c3.original) == 1
+    assert len(c3.original) == 2
     assert a2 in c3.original
 
-    #     Superset {a1}, subset {a1}: subset {} => superset {} ***POLICY***
+    #     Superset {a1}, subset {a1}: subset {} => superset {a1} ***POLICY***
     c4 = C()
     c4.original = a1
     c4.subset = a1
     c4.subset.remove(a1)
-    assert len(c4.original) == 0
+    assert len(c4.original) == 1
 
     # Superset changes, superset has multiplicity *, subset has multiplicity 1 or *:
     #     Both sets {}: superset {a1} => subset {}
@@ -603,6 +606,43 @@ def test_int_and_boolean_attributes(input, expected):
     assert a.a == expected
 
 
+@pytest.mark.parametrize(
+    "input,expected",
+    [
+        [None, None],
+        [0, 0],
+        [1, 1],
+        [2, 2],
+        ["*", "*"],
+    ],
+)
+def test_unlimited_natural_attributes(input, expected):
+    class A(Base):
+        a = attribute("a", UnlimitedNatural, 0)
+
+    a = A()
+    a.a = input
+
+    assert a.a == expected
+
+
+@pytest.mark.parametrize(
+    "input",
+    [
+        "foo",
+        -1,
+    ],
+)
+def test_unlimited_natural_attributes_wrong_inputs(input):
+    class A(Base):
+        a = attribute("a", UnlimitedNatural, 0)
+
+    a = A()
+
+    with pytest.raises(ValueError):
+        a.a = input
+
+
 def test_attributes_loading_failure():
     class A(Base):
         a: attribute[int]
@@ -616,10 +656,15 @@ def test_attributes_loading_failure():
 
 
 def test_enumerations():
+    class EnumKind(enum.StrEnum):
+        one = "one"
+        two = "two"
+        three = "three"
+
     class A(Base):
         a: enumeration
 
-    A.a = enumeration("a", ("one", "two", "three"), "one")
+    A.a = enumeration("a", EnumKind, EnumKind.one)
     a = A()
     assert a.a == "one"
     a.a = "two"
@@ -630,7 +675,7 @@ def test_enumerations():
     with pytest.raises(TypeError):
         a.a = "four"
 
-    assert a.a == "three"
+    assert a.a == EnumKind.three
 
     del a.a
     assert a.a == "one"

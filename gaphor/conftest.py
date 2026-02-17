@@ -11,6 +11,7 @@ from io import StringIO
 from pathlib import Path
 
 import pytest
+import pytest_asyncio
 
 import gaphor.services.properties
 
@@ -27,8 +28,7 @@ from gaphor.core.modeling.modelinglanguage import (
     MockModelingLanguage,
 )
 from gaphor.diagram.general.modelinglanguage import GeneralModelingLanguage
-from gaphor.diagram.painter import ItemPainter
-from gaphor.storage import storage
+import gaphor.storage as storage
 from gaphor.SysML.modelinglanguage import SysMLModelingLanguage
 from gaphor.UML.modelinglanguage import UMLModelingLanguage
 from gaphor.UML.sanitizerservice import SanitizerService
@@ -135,13 +135,11 @@ def models():
     return Path(__file__).parent.parent / "models"
 
 
-@pytest.fixture
-def view(diagram):
+@pytest_asyncio.fixture
+async def view(diagram):
     view = DiagramView(model=diagram)
-    item_painter = ItemPainter(view.selection)
-    view.painter = item_painter
-    view.bounding_box_painter = item_painter
-    return view
+    yield view
+    diagram.unregister_view(view)
 
 
 @pytest.fixture(autouse=True)

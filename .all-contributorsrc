@@ -1587,6 +1587,143 @@
       "contributions": [
         "translation"
       ]
+    },
+    {
+      "login": "Jummit",
+      "name": "Jummit",
+      "avatar_url": "https://avatars.githubusercontent.com/u/28286961?v=4",
+      "profile": "http://jummit.com",
+      "contributions": [
+        "bug",
+        "code"
+      ]
+    },
+    {
+      "login": "smolBlackCat",
+      "name": "Gabriel de Moura",
+      "avatar_url": "https://avatars.githubusercontent.com/u/66385489?v=4",
+      "profile": "https://github.com/smolBlackCat",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "City-busz",
+      "name": "Balló György",
+      "avatar_url": "https://avatars.githubusercontent.com/u/530525?v=4",
+      "profile": "https://pkgbuild.com/~bgyorgy/",
+      "contributions": [
+        "bug",
+        "code"
+      ]
+    },
+    {
+      "login": "ichxorya",
+      "name": "Curly-Howard-Chungus Correspondence | Lamport-Cabot-Codd-Backus-Naur Form",
+      "avatar_url": "https://avatars.githubusercontent.com/u/26222301?v=4",
+      "profile": "https://github.com/ichxorya",
+      "contributions": [
+        "translation"
+      ]
+    },
+    {
+      "login": "DIYman",
+      "name": "DIYman",
+      "avatar_url": "https://avatars.githubusercontent.com/u/11150791?v=4",
+      "profile": "https://github.com/DIYman",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "emmanuel-ferdman",
+      "name": "Emmanuel Ferdman",
+      "avatar_url": "https://avatars.githubusercontent.com/u/35470921?v=4",
+      "profile": "https://github.com/emmanuel-ferdman",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Kiisu-Master",
+      "name": "Kiisu_Master",
+      "avatar_url": "https://avatars.githubusercontent.com/u/142301391?v=4",
+      "profile": "https://github.com/Kiisu-Master",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "Zeyue",
+      "name": "Fabien Liang",
+      "avatar_url": "https://avatars.githubusercontent.com/u/8974617?v=4",
+      "profile": "https://github.com/Zeyue",
+      "contributions": [
+        "translation"
+      ]
+    },
+    {
+      "login": "jacobsaki",
+      "name": "Jacob Saki",
+      "avatar_url": "https://avatars.githubusercontent.com/u/79813296?v=4",
+      "profile": "https://github.com/jacobsaki",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "hbartsch0",
+      "name": "hayden",
+      "avatar_url": "https://avatars.githubusercontent.com/u/126112798?v=4",
+      "profile": "https://github.com/hbartsch0",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "mvinca",
+      "name": "mvinca",
+      "avatar_url": "https://avatars.githubusercontent.com/u/27032375?v=4",
+      "profile": "https://github.com/mvinca",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "bgkerion",
+      "name": "Paolo Bellagente",
+      "avatar_url": "https://avatars.githubusercontent.com/u/7568698?v=4",
+      "profile": "https://github.com/bgkerion",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "pablomarino",
+      "name": "Pablo Mariño",
+      "avatar_url": "https://avatars.githubusercontent.com/u/276400?v=4",
+      "profile": "https://github.com/pablomarino",
+      "contributions": [
+        "translation"
+      ]
+    },
+    {
+      "login": "Nekothegamer",
+      "name": "Nekothegamer",
+      "avatar_url": "https://avatars.githubusercontent.com/u/112352776?v=4",
+      "profile": "https://github.com/Nekothegamer",
+      "contributions": [
+        "translation"
+      ]
+    },
+    {
+      "login": "FengZhe-ZYH",
+      "name": "FengZhe-ZYH",
+      "avatar_url": "https://avatars.githubusercontent.com/u/121104554?v=4",
+      "profile": "https://github.com/FengZhe-ZYH",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,

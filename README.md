@@ -7,8 +7,8 @@
 [![All Contributors.org](https://img.shields.io/github/all-contributors/gaphor/gaphor/main)](https://github.com/gaphor/gaphor/blob/main/CONTRIBUTORS.md)
 [![Matrix](https://img.shields.io/badge/chat-on%20Matrix-success)](https://app.element.io/#/room/#gaphor_Lobby:gitter.im)
 
-[![Maintainability](https://api.codeclimate.com/v1/badges/f00974f5d7fe69fe4ecd/maintainability)](https://codeclimate.com/github/gaphor/gaphor/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/f00974f5d7fe69fe4ecd/test_coverage)](https://codeclimate.com/github/gaphor/gaphor/test_coverage)
+[![Maintainability](https://qlty.sh/gh/gaphor/projects/gaphor/maintainability.svg)](https://qlty.sh/gh/gaphor/projects/gaphor)
+[![Code Coverage](https://qlty.sh/gh/gaphor/projects/gaphor/coverage.svg)](https://qlty.sh/gh/gaphor/projects/gaphor)
 [![Translation Status](https://hosted.weblate.org/widgets/gaphor/-/gaphor/svg-badge.svg)](https://hosted.weblate.org/engage/gaphor)
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/9512/badge)](https://www.bestpractices.dev/projects/9512)
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg)](https://github.com/RichardLitt/standard-readme)
@@ -157,3 +157,8 @@ Licensed under the [Apache License v2](LICENSES/Apache-2.0.txt).
 Summary: You can do what you like with Gaphor, as long as you include the
 required notices. This permissive license contains a patent license from the
 contributors of the code.
+
+## 🤝 Sponsors
+
+- Free code signing provided by [SignPath.io](https://about.signpath.io),
+  certificate by [SignPath Foundation](signpath.org)

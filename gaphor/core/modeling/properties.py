@@ -25,11 +25,12 @@ methods:
 
 from __future__ import annotations
 
+import enum
 import logging
-from collections.abc import Callable, Iterable, Sequence
+from collections.abc import Callable, Iterable
+from dataclasses import dataclass
 from typing import (
     Any,
-    Generic,
     Literal,
     Protocol,
     TypeVar,
@@ -50,12 +51,16 @@ from gaphor.core.modeling.event import (
     RedefinedAdded,
     RedefinedDeleted,
     RedefinedSet,
+    RedefinedUpdated,
 )
 
 __all__ = ["attribute", "enumeration", "association", "derivedunion", "redefine"]
 
 
 log = logging.getLogger(__name__)
+
+
+UnlimitedNatural = int | Literal["*"]
 
 
 E = TypeVar("E")
@@ -185,24 +190,24 @@ class subsettable_umlproperty(umlproperty):
                 + self.name
             )
         self.subsets.add(subset)
-        assert isinstance(
-            subset, association | derived
-        ), f"have element {subset}, expected association"
+        assert isinstance(subset, association | derived | redefine), (
+            f"have element {subset}, expected association, derived or redefine"
+        )
         subset.dependent_properties.add(self)
 
     def propagate(self, event): ...
 
 
-class attribute(umlproperty, Generic[T]):
+class attribute[T](umlproperty):
     """Attribute.
 
-    Element.attr = attribute('attr', types.StringType, '')
+    Element.attr = attribute('attr', str, '')
     """
 
     def __init__(
         self,
         name: str,
-        type: type[str | int],
+        type: type[str | int | bool],
         default: str | int | None = None,
     ):
         super().__init__(name)
@@ -225,17 +230,29 @@ class attribute(umlproperty, Generic[T]):
     def set(self, obj, value):
         if (
             value is not None
-            and not isinstance(value, self.type)
-            and not isinstance(value, str)
+            and self.type is not UnlimitedNatural
+            and not isinstance(value, str | self.type)
         ):
-            raise TypeError(
-                f"Value should be of type {self.type}"
-                and self.type.__name__
-                or self.type
-            )
+            raise TypeError(f"Value should be of type {self.type}, not {type(value)}")
 
-        if self.type is int and isinstance(value, str | bool):
-            value = 0 if value == "False" else 1 if value == "True" else int(value)
+        elif value is not None and self.type is UnlimitedNatural:
+            if value != "*":
+                value = int(value)
+                if value < 0:
+                    raise ValueError(
+                        "Value for UnlimitedNatural should be int >= 0, or '*'"
+                    )
+
+        elif self.type is int and isinstance(value, str | bool):
+            value = (
+                0
+                if value == "False"
+                else 1
+                if value == "True"
+                else "*"
+                if value == "*"
+                else int(value)
+            )
 
         if value == self.get(obj):
             return
@@ -260,22 +277,19 @@ class attribute(umlproperty, Generic[T]):
 class enumeration(umlproperty):
     """Enumeration.
 
-      Element.enum = enumeration('enum', ('one', 'two', 'three'), 'one')
+      Element.enum = enumeration('enum', EnumKind, 'one')
 
     An enumeration is a special kind of attribute that can only hold a
-    predefined set of values. Multiplicity is always `[0..1]`
+    predefined set of values. Multiplicity is always `[0..1]`.
     """
 
-    # All enumerations have a type 'str'
-    type = str
-
-    def __init__(self, name: str, values: Sequence[str], default: str):
+    def __init__(self, name: str, type: type[enum.StrEnum], default: enum.StrEnum):
         super().__init__(name)
-        self.values = values
+        self.type = type
         self.default = default
 
     def __str__(self):
-        return f"<enumeration {self.name}: {self.values} = {self.default}>"
+        return f"<enumeration {self.name}: {self.type.__name__} = {self.default}>"
 
     def get(self, obj):
         return getattr(obj, self._name, self.default)
@@ -287,8 +301,8 @@ class enumeration(umlproperty):
         self.set(obj, self.default)
 
     def set(self, obj, value):
-        if value not in self.values:
-            raise TypeError(f"Value should be one of {self.values}")
+        if value not in self.type:
+            raise TypeError(f"Value should be one of {list(self.type)}")
         old = self.get(obj)
         if value == old:
             return
@@ -329,17 +343,22 @@ class association(subsettable_umlproperty):
     Making the outcomes deterministic requires making some policy choices. In the cases below,
     those marked with ***POLICY*** are not solely determined by the logic of set theory.
 
-    There is a significant design assumption that drives the policy decisions: there is only one superset-subset path
-    by which an element may become a member of the superset. In other words, if the superset has two or more subsets,
-    a given element can be a member of at most one subset. This is really an assumption about the metamodel architecture.
-    The implication is that if an element is removed from a subset, it must be removed from the superset. Furthermore,
-    if an element is present in both the superset and the subset, and the element is removed from the superset, it must
-    also be removed from the subset.
+    The handling of the subset-superset relation depends upon the nature of the superset.
+        If the superset is a derived union, the removal of an element from the subset should also remove
+            it from the superset unless the element is present in the superset because of a different subset.
+        If the superset is an ordinary collection, the behavior depends upon the multiplicity of the set.
+            If the superset has an allowed multiplicity > 1, the removal of an element from the subset should not
+                cause the element to be removed from the superset.
+            If the superset has an allowed multiplicity of 1, the removal of an element from the subset should
+                cause the element to be removed from the superset.
+        if the superset is an ordinary collection and an element is removed from the superset, it must
+            also be removed from the subset.
 
     Subset changes, both sets have a multiplicity of 1:
         Both sets {}: subset {a1} => superset {a1}
         Superset {a1}, subset {}: subset {a2} => superset {a2} ***POLICY***
-        Superset {a1}, subset {a1}: subset {} => superset {} ***POLICY***
+        Derived Union: Superset {a1}, subset {a1}: subset {} => superset {} ***POLICY***
+        Ordinary Collection: Superset {a1}, subset {a1}: subset {} => superset {a1} ***POLICY***
         Superset {a1}, subset {a1}: subset {a2} => superset {a2} ***POLICY***
 
     Superset changes, both sets have a multiplicity of 1:
@@ -350,8 +369,11 @@ class association(subsettable_umlproperty):
     Subset changes, superset has multiplicity *, subset has multiplicity 1 or *:
         Both sets {}: subset {a1} => superset {a1}
         Superset {a1}, subset {}, subset {a2} => superset {a1, a2}
-        Superset {a1}, subset {a1}: subset {} => superset {} ***POLICY***
-        Superset {a1}, subset {a1}: subset {a2}, => superset {a2} ***POLICY***
+        Derived Union: Superset {a1}, subset {a1}: subset {} => superset {} ***POLICY***
+        Ordinary Collection: Superset {a1}, subset {a1}: subset {} => superset {a1} ***POLICY***
+        Derived Union: Superset {a1}, subset {a1}: subset {a2}, => superset {a2} ***POLICY***
+            assuming that a1 is not in another subset of the derived union
+        Ordinary Collection: Superset {a1}, subset {a1}: subset {a2}, => superset {a1, a2} ***POLICY***
 
     Superset changes, superset has multiplicity *, subset has multiplicity 1 or *:
         Both sets {}: superset {a1} => subset {}
@@ -589,16 +611,28 @@ class association(subsettable_umlproperty):
 
         current_value = self.get(event.element)
 
+        upper_gt_1 = self.upper == "*" or int(self.upper) > 1
         if isinstance(event, AssociationSet):
             if event.new_value != current_value:
-                self.set(event.element, event.new_value)
+                # new_value is coming from a subset. If the value is None and self is not derived
+                # and has upper > 1 then we make no change to this association.
+                not_derived = not isinstance(self, derived)
+                null_value = event.new_value is None
+                if not (not_derived and null_value and upper_gt_1):
+                    self.set(event.element, event.new_value)
         elif isinstance(event, AssociationDeleted):
             value = self.get(event.element)
             if isinstance(value, collection):
                 if event.old_value in self.get(event.element):
-                    self.delete(event.element, event.old_value)
+                    # new_value is coming from a subset. If self is not derived and this is a collection
+                    # we make no change to this association.
+                    if isinstance(self, derived) or not upper_gt_1:
+                        self.delete(event.element, event.old_value)
             elif event.old_value is value:
-                self.delete(event.element, event.old_value)
+                # new_value is coming from a subset. If self is not derived and this is a collection
+                # we make no change to this association.
+                if isinstance(self, derived) or not upper_gt_1:
+                    self.delete(event.element, event.old_value)
         elif isinstance(event, AssociationAdded):
             self.set(event.element, event.new_value)
 
@@ -657,16 +691,16 @@ class associationstub(umlproperty):
             c.discard(value)
 
 
+@dataclass
 class unioncache:
     """Small cache helper object for derivedunions."""
 
-    def __init__(self, owner: object, data: object, version: int) -> None:
-        self.owner = owner
-        self.data = data
-        self.version = version
+    owner: object
+    data: object
+    version: int
 
 
-class derived(subsettable_umlproperty, Generic[T]):
+class derived[T](subsettable_umlproperty):
     """Base class for derived properties, both derived unions and custom
     properties.
 
@@ -680,7 +714,7 @@ class derived(subsettable_umlproperty, Generic[T]):
 
     opposite = None
 
-    def __init__(  # type: ignore[misc]
+    def __init__(  # type: ignore[explicit-any]
         self,
         name: str,
         type: type[T],
@@ -866,7 +900,9 @@ class derivedunion(derived[T]):
         elif isinstance(event, AssociationSet):
             old_value, new_value = event.old_value, event.new_value
             if old_value and old_value not in values:
-                self.handle(DerivedDeleted(event.element, self, old_value))
+                pass
+                # Change so that deletions from subsets no longer delete from superset
+                # self.handle(DerivedDeleted(event.element, self, old_value))
             if new_value and new_value not in values:
                 self.handle(DerivedAdded(event.element, self, new_value))
 
@@ -901,24 +937,28 @@ class redefine(umlproperty):
         name: str,
         type: type[T],
         original: relation,
+        opposite: str | None = None,
     ):
         super().__init__(name)
-        assert isinstance(
-            original, association | derived
-        ), f"expected association or derived, got {original}"
+        assert isinstance(original, association | derived), (
+            f"expected association or derived, got {original}"
+        )
         self.decl_class = decl_class
         self.type = type
         self.original: association | derived = original
         self.upper = original.upper
         self.lower = original.lower
+        self._opposite = opposite
 
         original.dependent_properties.add(self)
 
     @property
     def opposite(self) -> str | None:
-        return (
-            self.original.opposite if isinstance(self.original, association) else None
-        )
+        if self._opposite:
+            return self._opposite
+        elif isinstance(self.original, association):
+            return self.original.opposite
+        return None
 
     @property
     def composite(self) -> bool:
@@ -975,6 +1015,8 @@ class redefine(umlproperty):
                 self.handle(
                     RedefinedDeleted(event.element, self, event.old_value, event.index)
                 )
+            elif isinstance(event, AssociationUpdated):
+                self.handle(RedefinedUpdated(event.element, self))
             else:
                 log.error(
                     "Don't know how to handle event "

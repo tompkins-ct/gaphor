@@ -51,19 +51,20 @@ def on_drag_begin(gesture, start_x, start_y, placement_state: PlacementState):
     else:
         placement_state.event_manager.handle(DiagramItemPlaced(item))
 
-    view.selection.dropzone_item = None
     view.model.update({item})
 
 
 def create_item(view, factory, event_manager, x, y):
     selection = view.selection
     parent = selection.dropzone_item
+    selection.dropzone_item = None
     item = factory(view.model, parent)
     x, y = view.get_matrix_v2i(item).transform_point(x, y)
     item.matrix.translate(x, y)
     view.model.update({item})
     if parent:
         drop(item, parent, *view.get_matrix_v2i(parent).transform_point(x, y))
+
     selection.unselect_all()
     selection.focused_item = item
     event_manager.handle(

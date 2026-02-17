@@ -10,8 +10,9 @@ from __future__ import annotations
 
 import itertools
 from collections.abc import Iterable, Sequence
-from typing import TypeVar
 
+from gaphor.core.modeling import UnlimitedNatural
+from gaphor.diagram.group import owner_of_type
 from gaphor.UML.uml import (
     Artifact,
     Association,
@@ -29,9 +30,15 @@ from gaphor.UML.uml import (
     Generalization,
     InstanceSpecification,
     Interface,
+    LiteralBoolean,
+    LiteralInteger,
+    LiteralString,
+    LiteralUnlimitedNatural,
     Message,
     MessageOccurrenceSpecification,
+    MultiplicityElement,
     Package,
+    Parameter,
     Port,
     Property,
     Realization,
@@ -41,9 +48,8 @@ from gaphor.UML.uml import (
     StructuredClassifier,
     Type,
     Usage,
+    ValueSpecification,
 )
-
-T = TypeVar("T", bound=Element)
 
 
 def stereotypes_str(element: Element, stereotypes: Sequence[str] = ()) -> str:
@@ -93,9 +99,9 @@ def apply_stereotype(element: Element, stereotype: Stereotype) -> InstanceSpecif
      stereotype
         UML metamodel stereotype instance.
     """
-    assert (
-        element.model is stereotype.model
-    ), "Element and Stereotype are from different models"
+    assert element.model is stereotype.model, (
+        "Element and Stereotype are from different models"
+    )
     model = element.model
     obj = model.create(InstanceSpecification)
     obj.classifier = stereotype
@@ -157,9 +163,9 @@ def get_applied_stereotypes(element: Element) -> Sequence[Stereotype]:
 
 def create_extension(metaclass: Class, stereotype: Stereotype) -> Extension:
     """Create an Extension association between a metaclass and a stereotype."""
-    assert (
-        metaclass.model is stereotype.model
-    ), "Metaclass and Stereotype are from different models"
+    assert metaclass.model is stereotype.model, (
+        "Metaclass and Stereotype are from different models"
+    )
 
     model = metaclass.model
     ext: Extension = model.create(Extension)
@@ -191,9 +197,9 @@ def add_slot(
     instance: InstanceSpecification, definingFeature: StructuralFeature
 ) -> Slot:
     """Add slot to instance specification for an attribute."""
-    assert (
-        instance.model is definingFeature.model
-    ), "Instance and Defining feature are from different models"
+    assert instance.model is definingFeature.model, (
+        "Instance and Defining feature are from different models"
+    )
     model = instance.model
     slot = model.create(Slot)
     slot.definingFeature = definingFeature
@@ -201,10 +207,29 @@ def add_slot(
     return slot
 
 
+def get_slot_value(slot: Slot) -> str | None:
+    """Get slot value as a string."""
+    if slot.value is None:
+        return None
+    if isinstance(slot.value, LiteralString):
+        return str(slot.value.value)
+    return None
+
+
+def set_slot_value(slot: Slot, value: str) -> None:
+    """Set slot value to a string."""
+    if slot.value:
+        slot.value.unlink()
+    slot_value = slot.model.create(LiteralString)
+    slot.value = slot_value
+    slot_value.owningSlot = slot
+    slot_value.value = value
+
+
 def create_dependency(supplier, client):
-    assert (
-        supplier.model is client.model
-    ), "Supplier and Client are from different models"
+    assert supplier.model is client.model, (
+        "Supplier and Client are from different models"
+    )
     model = supplier.model
     dep = model.create(Dependency)
     dep.supplier = supplier
@@ -213,9 +238,9 @@ def create_dependency(supplier, client):
 
 
 def create_realization(realizingClassifier, abstraction):
-    assert (
-        realizingClassifier.model is abstraction.model
-    ), "Realizing classifier and Abstraction are from different models"
+    assert realizingClassifier.model is abstraction.model, (
+        "Realizing classifier and Abstraction are from different models"
+    )
     model = realizingClassifier.model
     dep = model.create(Realization)
     dep.realizingClassifier = realizingClassifier
@@ -224,9 +249,9 @@ def create_realization(realizingClassifier, abstraction):
 
 
 def create_generalization(general, specific):
-    assert (
-        general.model is specific.model
-    ), "General and Specific are from different models"
+    assert general.model is specific.model, (
+        "General and Specific are from different models"
+    )
     model = general.model
     gen = model.create(Generalization)
     gen.general = general
@@ -241,8 +266,8 @@ def create_association(type_a: Type, type_b: Type):
     assoc = model.create(Association)
     end_a = model.create(Property)
     end_b = model.create(Property)
-    assoc.memberEnd = end_a
-    assoc.memberEnd = end_b
+    end_a.association = assoc
+    end_b.association = assoc
     end_a.type = type_a
     end_b.type = type_b
     # set default navigability (unknown)
@@ -407,11 +432,169 @@ def clone_message(msg, inverted=False):
     return message
 
 
-def owner_of_type(element: Element | None, owner_type: type[T]) -> T | None:
-    if element is None or isinstance(element, owner_type):
-        return element
-    return owner_of_type(element.owner, owner_type)
-
-
 def owner_package(element: Element | None) -> Package | None:
     return owner_of_type(element, Package)
+
+
+def get_literal_value_as_string(value: ValueSpecification) -> str | None:
+    """Get literal value as a string."""
+    if value is None:
+        return None
+    if isinstance(value, LiteralUnlimitedNatural):
+        return str(value.value)
+    if isinstance(value, LiteralInteger):
+        return str(value.value)
+    if isinstance(value, LiteralString):
+        return str(value.value)
+    if isinstance(value, LiteralBoolean):
+        if value.value is True:
+            return "true"
+        return "false"
+    return None
+
+
+def create_value_specification_for_type_and_value(
+    model, type: str | None, value: str | None
+) -> ValueSpecification | None:
+    if value is None:
+        return None
+    if type is None:
+        if value == "true" or value == "false":
+            type = "bool"
+        elif value.isnumeric():
+            type = "int"
+        else:
+            type = "str"
+    value_specification: ValueSpecification
+    match type:
+        case "bool" | "Boolean":
+            value_specification = model.create(LiteralBoolean)
+            if value == "true":
+                value_specification.value = True
+                value_specification.name = "true"
+            else:
+                value_specification.value = False
+                value_specification.name = "false"
+        case "str" | "String":
+            stripped_value = value.replace('"', "")
+            value_specification = model.create(LiteralString)
+            value_specification.value = value
+            value_specification.name = stripped_value
+        case "int" | "Integer":
+            value_specification = model.create(LiteralInteger)
+            value_specification.value = int(value)
+            value_specification.name = value
+        case "UnlimitedNatural":
+            value_specification = model.create(LiteralUnlimitedNatural)
+            value_specification.value = value
+            value_specification.name = str(value)
+        # case "float" | "Real":
+        #     value_specification = model.create(LiteralReal)
+        #     value_specification.value = float(value)
+        case _:
+            # If we do not know, cram it in a string
+            value_specification = model.create(LiteralString)
+            value_specification.value = value
+            value_specification.name = value
+    return value_specification
+
+
+def get_multiplicity_lower_value(element: MultiplicityElement) -> int | None:
+    """Get lower value of a multiplicity element."""
+    if element.lowerValue is None:
+        return None
+    if isinstance(element.lowerValue, LiteralInteger):
+        return int(element.lowerValue.value)
+    return None
+
+
+def get_multiplicity_lower_value_as_string(
+    multiplicity: MultiplicityElement,
+) -> str | None:
+    """Get lower value of a multiplicity as a string."""
+    if multiplicity.lowerValue is None:
+        return None
+    if isinstance(multiplicity.lowerValue, LiteralInteger):
+        return str(multiplicity.lowerValue.value)
+    return None
+
+
+def set_multiplicity_lower_value(
+    element: MultiplicityElement, value: int | str | None
+) -> None:
+    """Set lower value of a multiplicity."""
+    if element.lowerValue:
+        element.lowerValue.unlink()
+    if value is None or "":
+        return
+    try:
+        value = int(value)
+    except ValueError:
+        return
+
+    lower_value = element.model.create(LiteralInteger)
+    lower_value.value = value
+    lower_value.name = str(value)
+    element.lowerValue = lower_value
+
+
+def get_multiplicity_upper_value(
+    element: MultiplicityElement,
+) -> UnlimitedNatural | None:
+    """Get upper value of a parameter."""
+    if element.upperValue is None:
+        return None
+    if isinstance(element.upperValue, LiteralUnlimitedNatural):
+        return element.upperValue.value  # type: ignore[no-any-return]
+    return None
+
+
+def get_multiplicity_upper_value_as_string(
+    element: MultiplicityElement,
+) -> str | None:
+    """Get upper value of a multiplicity as a string."""
+    if element.upperValue is None:
+        return None
+    if isinstance(element.upperValue, LiteralUnlimitedNatural):
+        return str(element.upperValue.value)
+    return None
+
+
+def set_multiplicity_upper_value(
+    element: MultiplicityElement, value: UnlimitedNatural | str | None
+) -> None:
+    """Set upper value of a multiplicity."""
+    if element.upperValue:
+        element.upperValue.unlink()
+    if value is None or value == "":
+        return
+    try:
+        if value != "*":
+            value = int(value)
+    except ValueError:
+        return
+    upper_value = element.model.create(LiteralUnlimitedNatural)
+    upper_value.value = value
+    upper_value.name = str(value)
+    element.upperValue = upper_value
+
+
+def get_default_value_as_string(element: Parameter | Property) -> str | None:
+    """Get default value of a parameter as a string."""
+    if element.defaultValue is None:
+        return None
+    return get_literal_value_as_string(element.defaultValue)
+
+
+def set_default_value_from_string(
+    element: Parameter | Property, value: str | None
+) -> None:
+    """Set default value of a parameter."""
+    if element.defaultValue:
+        element.defaultValue.unlink()
+    if value is None:
+        return
+    default_value = create_value_specification_for_type_and_value(
+        element.model, element.typeValue, value
+    )
+    element.defaultValue = default_value

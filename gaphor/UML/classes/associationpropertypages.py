@@ -41,7 +41,7 @@ def blockable(func):
 @PropertyPages.register(UML.Association)
 class AssociationPropertyPage(PropertyPageBase):
     NAVIGABILITY = (None, False, True)
-    AGGREGATION = UML.Property.aggregation.values
+    AGGREGATION = list(UML.Property.aggregation.type)
 
     order = 20
 
@@ -162,7 +162,7 @@ class AssociationPropertyPage(PropertyPageBase):
     @blockable
     def _on_end_name_change(self, entry, subject):
         with self.update_end_name.block():
-            with Transaction(self.event_manager):
+            with Transaction(self.event_manager, context="editing"):
                 parse(subject, entry.get_text())
 
     @blockable

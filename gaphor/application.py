@@ -92,9 +92,6 @@ class Application(Service, ActionProvider):
         """Initialize an application session."""
 
         filename = Path(filename) if filename else None
-        if filename is None is template:
-            return self._spawn_session(session=Session(services=services))
-
         if filename and not force:
             for session in self._sessions:
                 if session.filename == filename:
@@ -124,12 +121,12 @@ class Application(Service, ActionProvider):
             self._active_session = session
 
         @event_handler(SessionShutdown)
-        def on_session_shutdown(_event):
+        def on_session_shutdown(event: SessionShutdown):
             self.shutdown_session(session)
-            if not self._sessions and not (
-                self._gtk_app and self._gtk_app.get_windows()
+            if not self._sessions and (
+                event.quitting or not (self._gtk_app and self._gtk_app.get_windows())
             ):
-                self.quit()
+                self.shutdown()
 
         event_manager = session.get_service("event_manager")
         event_manager.subscribe(on_active_session_changed)
@@ -174,12 +171,10 @@ class Application(Service, ActionProvider):
         for session in list(self._sessions):
             self._active_session = session
             event_manager = session.get_service("event_manager")
-            event_manager.handle(SessionShutdownRequested())
-            if self._active_session == session:
-                logger.info("Window not closed, abort quit operation")
-                return False
-        self.shutdown()
-        return True
+            event_manager.handle(SessionShutdownRequested(quitting=True))
+
+        if not self._sessions:
+            self.shutdown()
 
     def all(self, base: type[T]) -> Iterator[tuple[str, T]]:
         return (

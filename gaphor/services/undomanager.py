@@ -14,9 +14,9 @@ from __future__ import annotations
 
 import logging
 from collections.abc import Callable
+from dataclasses import dataclass
 
 from gaphor.abc import ActionProvider, Service
-from gaphor.action import action
 from gaphor.core import event_handler
 from gaphor.core.modeling.base import Base, RepositoryProtocol, swap_element_type
 from gaphor.core.modeling.event import (
@@ -37,6 +37,7 @@ from gaphor.diagram.copypaste import deserialize, serialize
 from gaphor.event import (
     ActionEnabled,
     TransactionBegin,
+    TransactionClosed,
     TransactionCommit,
     TransactionRollback,
 )
@@ -72,11 +73,27 @@ class ActionStack:
             act()
 
 
+class EditingStack(ActionStack):
+    """A transaction for text editing.
+
+    Editing stacks can add actions over multiple transactions.
+
+    An editing action can be closed, which means no more actions can be added.
+    """
+
+    def __init__(self):
+        super().__init__()
+        self.closed = False
+
+    def close(self):
+        self.closed = True
+
+
+@dataclass
 class UndoManagerStateChanged:
     """Event class used to send state changes on the Undo Manager."""
 
-    def __init__(self, undo_manager: UndoManager):
-        self.undo_manager = undo_manager
+    undo_manager: UndoManager
 
 
 class _UndoManagerTransactionCommitted:
@@ -130,6 +147,7 @@ class UndoManager(Service, ActionProvider):
         event_manager.priority_subscribe(self.begin_transaction)
         event_manager.subscribe(self.commit_transaction)
         event_manager.subscribe(self.rollback_transaction)
+        event_manager.subscribe(self.close_transaction)
         event_manager.subscribe(self._on_transaction_commit)
         event_manager.subscribe(self._on_transaction_rollback)
 
@@ -149,6 +167,7 @@ class UndoManager(Service, ActionProvider):
         self.event_manager.unsubscribe(self.begin_transaction)
         self.event_manager.unsubscribe(self.commit_transaction)
         self.event_manager.unsubscribe(self.rollback_transaction)
+        self.event_manager.unsubscribe(self.close_transaction)
         self.event_manager.unsubscribe(self._on_transaction_commit)
         self.event_manager.unsubscribe(self._on_transaction_rollback)
 
@@ -183,7 +202,18 @@ class UndoManager(Service, ActionProvider):
     def begin_transaction(self, event=None):
         """Add an action to the current transaction."""
         assert not self._current_transaction
-        self._current_transaction = ActionStack()
+        if event and event.context == "editing":
+            if (
+                self._undo_stack
+                and isinstance(self._undo_stack[-1], EditingStack)
+                and not self._undo_stack[-1].closed
+            ):
+                # "steal" the last transaction for amending
+                self._current_transaction = self._undo_stack.pop()
+            else:
+                self._current_transaction = EditingStack()
+        else:
+            self._current_transaction = ActionStack()
 
     def add_undo_action(self, action):
         """Add an action to undo."""
@@ -251,7 +281,17 @@ class UndoManager(Service, ActionProvider):
 
         self._action_executed()
 
-    @action(name="edit-undo", shortcut="<Primary>z")
+    @event_handler(TransactionClosed)
+    def close_transaction(self, _event=None):
+        if self._current_transaction:
+            logger.debug("Trying to close a transaction, while in a transaction")
+            return
+
+        if self._undo_stack:
+            last_transaction = self._undo_stack[-1]
+            if isinstance(last_transaction, EditingStack):
+                last_transaction.close()
+
     def undo_transaction(self):
         if not self._undo_stack:
             return
@@ -266,10 +306,6 @@ class UndoManager(Service, ActionProvider):
 
         self._action_executed()
 
-    @action(
-        name="edit-redo",
-        shortcut="<Primary><Shift>z",
-    )
     def redo_transaction(self):
         if not self._redo_stack:
             return
@@ -289,8 +325,8 @@ class UndoManager(Service, ActionProvider):
         return bool(self._redo_stack)
 
     def _action_executed(self, state_changed=True):
-        self.event_manager.handle(ActionEnabled("win.edit-undo", self.can_undo()))
-        self.event_manager.handle(ActionEnabled("win.edit-redo", self.can_redo()))
+        self.event_manager.handle(ActionEnabled("text.undo", self.can_undo()))
+        self.event_manager.handle(ActionEnabled("text.redo", self.can_redo()))
         if state_changed:
             self.event_manager.handle(UndoManagerStateChanged(self))
 

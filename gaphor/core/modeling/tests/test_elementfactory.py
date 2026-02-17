@@ -11,7 +11,8 @@ from gaphor.core.modeling.event import (
     ModelFlushed,
 )
 from gaphor.core.modeling.presentation import Presentation
-from gaphor.UML import Operation, Parameter
+from gaphor.core.modeling.stylesheet import StyleSheet
+from gaphor.UML import LiteralString, Operation, Parameter
 
 
 def test_element_factory_is_an_iterable(element_factory):
@@ -42,6 +43,12 @@ def test_create_is_idempotent_but_validates_type(element_factory):
 def test_should_not_create_presentation_elements(element_factory):
     with pytest.raises(TypeError):
         element_factory.create(Presentation)
+
+
+def test_style_sheet(element_factory):
+    style_sheet = element_factory.create(StyleSheet)
+
+    assert element_factory.style_sheet is style_sheet
 
 
 def test_flush(element_factory):
@@ -79,9 +86,12 @@ def test_unlink(element_factory):
     assert not list(element_factory.values()), list(element_factory.values())
 
     p = element_factory.create(Parameter)
-    p.defaultValue = "l"
+    defaultValue = element_factory.create(LiteralString)
+    defaultValue.value = "l"
+    defaultValue.owningParameter = p
+    p.defaultValue = defaultValue
 
-    assert len(list(element_factory.values())) == 1
+    assert len(list(element_factory.values())) == 2
 
     p.unlink()
     del p

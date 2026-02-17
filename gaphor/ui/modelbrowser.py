@@ -97,7 +97,7 @@ class ModelBrowser(UIComponent, ActionProvider):
         scrolled_window.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
         scrolled_window.set_child(self.tree_view)
 
-        apply_action_group(self, "tree-view", self.tree_view)
+        apply_action_group(self, "selection", self.tree_view)
 
         self.tree_view.add_controller(
             create_popup_controller(
@@ -173,18 +173,18 @@ class ModelBrowser(UIComponent, ActionProvider):
         if self.sorter:
             self.sorter.changed(Gtk.SorterChange.DIFFERENT)
 
-    @action(name="tree-view.open")
+    @action(name="selection.open")
     def tree_view_open_selected(self):
         element = self.get_selected_element()
         if element:
             self.open_element(element)
 
-    @action(name="tree-view.show-in-diagram")
+    @action(name="selection.show-in-diagram")
     def tree_view_show_in_diagram(self, diagram_id: str) -> None:
         element = self.element_factory.lookup(diagram_id)
         self.event_manager.handle(DiagramOpened(element))
 
-    @action(name="tree-view.rename", shortcut="F2")
+    @action(name="selection.rename", shortcut="F2")
     def tree_view_rename_selected(self):
         if row_item := get_first_selected_item(self.selection):
             tree_item = row_item.get_item()
@@ -219,7 +219,7 @@ class ModelBrowser(UIComponent, ActionProvider):
             if el_type.id == id
         )
 
-    @action(name="tree-view.create-element")
+    @action(name="win.create-element")
     def tree_view_create_element(self, id: str):
         own = self.get_selected_element()
         element_def = self.element_type(id)
@@ -233,7 +233,7 @@ class ModelBrowser(UIComponent, ActionProvider):
             self.select_element(element)
             self.tree_view_rename_selected()
 
-    @action(name="tree-view.delete", shortcut="Delete")
+    @action(name="selection.delete", shortcut="Delete")
     def tree_view_delete(self):
         with Transaction(self.event_manager):
             for element in self.get_selected_elements():
@@ -400,7 +400,9 @@ def toplevel_popup_model(modeling_language) -> Gio.Menu:
     model = create_diagram_types_model(modeling_language)
 
     part = Gio.Menu.new()
-    part.append(gettext("New _Package"), "tree-view.create-package")
+    menu_item = Gio.MenuItem.new(gettext("Package"), "win.create-element")
+    menu_item.set_attribute_value("target", GLib.Variant.new_string("package"))
+    part.append_item(menu_item)
     model.prepend_section(None, part)
     return model
 
@@ -570,9 +572,9 @@ def popup_model(element, modeling_language):
 
     part.append(
         gettext("_Open") if isinstance(element, Diagram) else gettext("Add to diagram"),
-        "tree-view.open",
+        "selection.open",
     )
-    part.append(gettext("_Rename"), "tree-view.rename")
+    part.append(gettext("_Rename"), "selection.rename")
     model.append_section(None, part)
 
     part = Gio.Menu.new()
@@ -591,7 +593,7 @@ def popup_model(element, modeling_language):
     model.append_section(None, part)
 
     part = Gio.Menu.new()
-    part.append(gettext("De_lete"), "tree-view.delete")
+    part.append(gettext("De_lete"), "selection.delete")
     model.append_section(None, part)
 
     if not element:
@@ -602,7 +604,7 @@ def popup_model(element, modeling_language):
         if diagram := presentation.diagram:
             menu_item = Gio.MenuItem.new(
                 gettext("Show in “{diagram}”").format(diagram=diagram.name),
-                "tree-view.show-in-diagram",
+                "selection.show-in-diagram",
             )
             menu_item.set_attribute_value("target", GLib.Variant.new_string(diagram.id))
             part.append_item(menu_item)
@@ -641,7 +643,7 @@ def create_element_types_model(modeling_language, element):
 
     for id, name, _, allowed_owning_elements in modeling_language.element_types:
         if isinstance(element, allowed_owning_elements):
-            menu_item = Gio.MenuItem.new(gettext(name), "tree-view.create-element")
+            menu_item = Gio.MenuItem.new(gettext(name), "win.create-element")
             menu_item.set_attribute_value("target", GLib.Variant.new_string(id))
             model.append_item(menu_item)
 

@@ -5,23 +5,22 @@ import logging
 from gaphas.guide import GuidePainter
 from gaphas.painter import FreeHandPainter, HandlePainter, PainterChain
 from gaphas.segment import LineSegmentPainter
-from gaphas.tool.itemtool import find_item_and_handle_at_point
+from gaphas.tool.itemtool import default_find_item_and_handle_at_point
 from gaphas.tool.rubberband import RubberbandPainter, RubberbandState
 from gaphas.view import GtkView
 from gi.repository import Adw, Gdk, GdkPixbuf, Gio, GLib, Gtk
 
-import gaphor.diagram.align
-from gaphor.action import action
 from gaphor.core import event_handler, gettext
+from gaphor.core.modeling import StyleSheet
 from gaphor.core.modeling.diagram import StyledDiagram
 from gaphor.core.modeling.event import (
     AttributeUpdated,
-    ElementDeleted,
     StyleSheetUpdated,
 )
+from gaphor.core.styling import PrefersColorScheme
 from gaphor.diagram.diagramtoolbox import get_tool_def, tooliter
+from gaphor.diagram.event import DiagramSelectionChanged
 from gaphor.diagram.painter import DiagramTypePainter, ItemPainter
-from gaphor.diagram.presentation import ElementPresentation
 from gaphor.diagram.tools import (
     apply_default_tool_set,
     apply_magnet_tool_set,
@@ -32,7 +31,7 @@ from gaphor.i18n import translated_ui_string
 from gaphor.transaction import Transaction
 from gaphor.ui.actiongroup import apply_action_group
 from gaphor.ui.clipboard import Clipboard
-from gaphor.ui.event import DiagramClosed, ToolSelected
+from gaphor.ui.event import ToolSelected
 
 log = logging.getLogger(__name__)
 
@@ -85,34 +84,22 @@ def get_placement_cursor(display, icon_name):
     return Gdk.Cursor.new_from_texture(get_placement_icon(display, icon_name), 1, 1)
 
 
-align = {
-    "left": gaphor.diagram.align.align_left,
-    "right": gaphor.diagram.align.align_right,
-    "vertical-center": gaphor.diagram.align.align_vertical_center,
-    "top": gaphor.diagram.align.align_top,
-    "bottom": gaphor.diagram.align.align_bottom,
-    "horizontal-center": gaphor.diagram.align.align_horizontal_center,
-    "max-height": gaphor.diagram.align.resize_max_height,
-    "max-width": gaphor.diagram.align.resize_max_width,
-    "max-size": gaphor.diagram.align.resize_max_size,
-}
-
-
 class DiagramPage:
     def __init__(self, diagram, event_manager, element_factory, modeling_language):
         self.event_manager = event_manager
+        self.element_factory = element_factory
         self.diagram = diagram
         self.modeling_language = modeling_language
         self.clipboard = Clipboard(event_manager, element_factory)
         self.style_manager = Adw.StyleManager.get_default()
 
         self.view: GtkView | None = None
+        self.alignment_button: Gtk.Button | None = None
         self.diagram_css: Gtk.CssProvider | None = None
 
         self.rubberband_state = RubberbandState()
         self.context_menu = Gtk.PopoverMenu.new_from_model(popup_model(diagram))
 
-        self.event_manager.subscribe(self._on_element_delete)
         self.event_manager.subscribe(self._on_attribute_updated)
         self.event_manager.subscribe(self._on_style_sheet_updated)
         self.event_manager.subscribe(self._on_tool_selected)
@@ -135,13 +122,17 @@ class DiagramPage:
         assert self.diagram
 
         builder = new_builder()
-        view = builder.get_object("view")
+        view: GtkView = builder.get_object("view")
         view.add_css_class(self._css_class())
         view.connect("delete", delete_selected_items, self.event_manager)
         view.connect("cut-clipboard", self.clipboard.cut)
         view.connect("copy-clipboard", self.clipboard.copy)
         view.connect("paste-clipboard", self.clipboard.paste_link)
         view.connect("paste-full-clipboard", self.clipboard.paste_full)
+        view.selection.add_handler(self._selection_changed)
+        self.clipboard.clipboard.connect(
+            "notify::content", self._clipboard_content_changed
+        )
 
         self.diagram_css = Gtk.CssProvider.new()
         Gtk.StyleContext.add_provider_for_display(
@@ -152,36 +143,22 @@ class DiagramPage:
 
         self.style_manager.connect("notify::dark", self._on_notify_dark)
 
+        view.model = self.diagram
         self.view = view
         self.context_menu.set_parent(view)
 
         self.select_tool("toolbox-pointer")
 
+        self._on_notify_dark(self.style_manager)
         self.update_drawing_style()
-
-        # Set model only after the painters are set
-        view.model = self.diagram
 
         diagrampage = builder.get_object("diagrampage")
         apply_action_group(self, "diagram", diagrampage)
+        self._clipboard_content_changed(self.clipboard.clipboard)
+
+        self.alignment_button = builder.get_object("alignment-button")
 
         return diagrampage
-
-    @action(name="diagram.align")
-    def toggle_editor_preferences(self, target: str):
-        if self.view and (
-            len(
-                elements := {
-                    item
-                    for item in self.view.selection.selected_items
-                    if isinstance(item, ElementPresentation)
-                }
-            )
-            >= 2
-        ):
-            with Transaction(self.event_manager):
-                align[target](elements)
-                self.diagram.update(self.diagram.ownedPresentation)
 
     def apply_tool_set(self, tool_name):
         """Return a tool associated with an id (action name).
@@ -237,14 +214,19 @@ class DiagramPage:
     def _css_class(self):
         return f"diagram-{id(self)}"
 
+    def _selection_changed(self, _item):
+        view = self.view
+        assert view
+        selection = view.selection
+        self.event_manager.handle(
+            DiagramSelectionChanged(
+                view, selection.focused_item, selection.selected_items
+            )
+        )
+
     @event_handler(ToolSelected)
     def _on_tool_selected(self, event: ToolSelected):
         self.select_tool(event.tool_name)
-
-    @event_handler(ElementDeleted)
-    def _on_element_delete(self, event: ElementDeleted):
-        if event.element is self.diagram:
-            self.event_manager.handle(DiagramClosed(self.diagram))
 
     @event_handler(AttributeUpdated)
     def _on_attribute_updated(self, event: AttributeUpdated):
@@ -256,7 +238,15 @@ class DiagramPage:
         self.update_drawing_style()
         self.diagram.update(self.diagram.ownedPresentation)
 
-    def _on_notify_dark(self, style_manager, gparam):
+    def _clipboard_content_changed(self, clipboard, _pspec=None):
+        if not self.view:
+            return
+
+        enabled = self.clipboard.can_paste()
+        self.view.action_set_enabled("clipboard.paste", enabled)
+        self.view.action_set_enabled("clipboard.paste-full", enabled)
+
+    def _on_notify_dark(self, style_manager, _gparam=None):
         self.update_drawing_style()
 
     def close(self):
@@ -271,7 +261,6 @@ class DiagramPage:
             self.diagram_css,
         )
 
-        self.event_manager.unsubscribe(self._on_element_delete)
         self.event_manager.unsubscribe(self._on_attribute_updated)
         self.event_manager.unsubscribe(self._on_style_sheet_updated)
         self.event_manager.unsubscribe(self._on_tool_selected)
@@ -293,16 +282,28 @@ class DiagramPage:
         assert self.view
         assert self.diagram_css
 
-        dark_mode = self.style_manager.get_dark()
-        style = self.diagram.style(StyledDiagram(self.diagram, dark_mode=dark_mode))
+        prefers_color_scheme = (
+            PrefersColorScheme.DARK
+            if self.style_manager.get_dark()
+            else PrefersColorScheme.LIGHT
+        )
 
+        view = self.view
+        style_sheet = self.element_factory.style_sheet or StyleSheet()
+        item_painter = ItemPainter(
+            view.selection,
+            functools.partial(
+                style_sheet.compute_style, prefers_color_scheme=prefers_color_scheme
+            ),
+        )
+
+        style = style_sheet.compute_style(
+            StyledDiagram(self.diagram), prefers_color_scheme
+        )
         bg = style.get("background-color", (0.0, 0.0, 0.0, 0.0))
         self.diagram_css.load_from_string(
             f".{self._css_class()} {{ background-color: rgba({int(255 * bg[0])}, {int(255 * bg[1])}, {int(255 * bg[2])}, {bg[3]}); }}",
         )
-
-        view = self.view
-        item_painter = ItemPainter(view.selection, dark_mode)
 
         if sloppiness := style.get("line-style", 0.0):
             item_painter = FreeHandPainter(item_painter, sloppiness=sloppiness)
@@ -316,7 +317,15 @@ class DiagramPage:
             .append(GuidePainter(view))
             .append(MagnetPainter(view))
             .append(RubberbandPainter(self.rubberband_state))
-            .append(DiagramTypePainter(self.diagram))
+            .append(
+                DiagramTypePainter(
+                    self.diagram,
+                    functools.partial(
+                        style_sheet.compute_style,
+                        prefers_color_scheme=prefers_color_scheme,
+                    ),
+                )
+            )
         )
 
         view.request_update(self.diagram.get_all_items())
@@ -333,12 +342,13 @@ def context_menu_controller(context_menu, diagram):
     def on_show_popup(ctrl, n_press, x, y):
         if (
             Transaction.in_transaction()
+            or ctrl.get_last_event() is None
             or not ctrl.get_last_event().triggers_context_menu()
         ):
             return
 
         view = ctrl.get_widget()
-        item, _handle = find_item_and_handle_at_point(view, (x, y))
+        item, _handle = default_find_item_and_handle_at_point(view, (x, y))
 
         context_menu.set_menu_model(
             popup_model(item.subject if item and item.subject else diagram)

@@ -9,7 +9,9 @@ T = TypeVar("T")
 logger = logging.getLogger(__name__)
 
 
-def initialize(scope, services=None, **known_services: T) -> dict[str, T]:
+def initialize[T](
+    scope: str, services: list[str] | None = None, **known_services: T
+) -> dict[str, T]:
     return init_entry_points(load_entry_points(scope, services), **known_services)
 
 
@@ -54,7 +56,7 @@ def init_entry_points(
                 if depcls:
                     kwargs[param_name] = init(param_name, depcls)
                 elif param.default is inspect.Parameter.empty:
-                    logger.warn(
+                    logger.warning(
                         "Entrypoint %s parameter %s does not reference a resolved dependency",
                         name,
                         param_name,

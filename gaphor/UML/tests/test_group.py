@@ -58,7 +58,7 @@ def test_ungroup_package(element_factory):
 
     assert ungroup(parent, package)
 
-    assert package.package is None
+    assert package.nestingPackage is None
 
 
 def test_do_not_ungroup_package_wrong_parent(element_factory):
@@ -69,7 +69,7 @@ def test_do_not_ungroup_package_wrong_parent(element_factory):
 
     assert not ungroup(wrong_parent, package)
 
-    assert package.package is parent
+    assert package.nestingPackage is parent
 
 
 def test_group_class_and_activity(element_factory):
@@ -145,6 +145,8 @@ def test_should_not_group_association_end(element_factory):
         UML.Image,
         UML.InstanceSpecification,
         UML.OccurrenceSpecification,
+        UML.LiteralSpecification,
+        UML.LiteralUnlimitedNatural,
         # The following elements are not shown if they have no owner
         UML.ConnectorEnd,
         UML.Parameter,

@@ -33,20 +33,20 @@ def test_object_node_property_page_upper_bound(diagram, element_factory, event_m
     upper_bound = find(widget, "upper-bound")
     upper_bound.set_text("test")
 
-    assert subject.upperBound == "test"
+    assert subject.upperBound.value == "test"
 
 
 def test_object_node_property_page_ordering(diagram, element_factory, event_manager):
     subject = element_factory.create(UML.ObjectNode)
 
-    assert subject.ordering == "unordered"
+    assert subject.ordering == "FIFO"
     property_page = ObjectNodePropertyPage(subject, event_manager)
 
     widget = property_page.construct()
     ordering = find(widget, "ordering")
-    ordering.set_selected(3)
+    ordering.set_selected(0)
 
-    assert subject.ordering == "FIFO"
+    assert subject.ordering == "unordered"
 
 
 def test_decision_node_property_page_show_type(diagram, element_factory, event_manager):
@@ -84,7 +84,7 @@ def test_join_node_property_page(element_factory, event_manager):
     join_spec = find(widget, "join-spec")
     join_spec.set_text("test")
 
-    assert subject.joinSpec == "test"
+    assert subject.joinSpec.value == "test"
 
 
 def test_flow_property_page(element_factory, event_manager):
@@ -95,4 +95,4 @@ def test_flow_property_page(element_factory, event_manager):
     guard = find(widget, "guard")
     guard.set_text("test")
 
-    assert subject.guard == "test"
+    assert subject.guard.value == "test"

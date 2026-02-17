@@ -38,8 +38,8 @@ def extension_metaclass(self):
 
 
 # Don't use derived() now, it can not deal with a [0..1] property derived from a [0..*] property.
-# Extension.metaclass = derived(Extension, 'metaclass', Class, 0, 1, Extension.ownedEnd, Association.memberEnd)  # noqa: E800
-# Extension.metaclass.filter = extension_metaclass  # noqa: E800
+# Extension.metaclass = derived(Extension, 'metaclass', Class, 0, 1, Extension.ownedEnd, Association.memberEnd)
+# Extension.metaclass.filter = extension_metaclass
 uml.Extension.metaclass = property(extension_metaclass, doc=extension_metaclass.__doc__)
 
 
@@ -127,7 +127,7 @@ def component_provided(self: uml.Component) -> list[uml.Realization]:
     # this is a generator of generators, so flatten it later
     rc_realizations = _pr_rc_interface_deps(self, uml.Realization)
 
-    return list(set(itertools.chain(implementations, realizations, *rc_realizations)))  # type: ignore[arg-type]
+    return list(set(itertools.chain(implementations, realizations, *rc_realizations)))
 
 
 uml.Component.provided = property(component_provided, doc=component_provided.__doc__)

@@ -63,6 +63,7 @@ class ActivityParameterNodeView(GObject.Object):
                 model = self.activity.model
                 node = model.create(UML.ActivityParameterNode)
                 node.parameter = model.create(UML.Parameter)
+                node.parameter.behavior = self.activity
                 self.node = node
                 self.activity.node = node
             parse(self.node.parameter, value)
@@ -216,7 +217,7 @@ class ActivityParameterNodeNamePropertyPage(PropertyPageBase):
 
     def _on_name_changed(self, entry):
         if self.subject.parameter.name != entry.get_text():
-            with Transaction(self.event_manager):
+            with Transaction(self.event_manager, context="editing"):
                 self.subject.parameter.name = entry.get_text()
 
 
@@ -240,7 +241,7 @@ class ShowActivityParameterNodeTypePropertyPage(ShowTypedElementPropertyPage):
 
 @PropertyPages.register(UML.ActivityParameterNode)
 class ActivityParameterNodeDirectionPropertyPage(PropertyPageBase):
-    DIRECTION = UML.Parameter.direction.values
+    DIRECTION = list(UML.Parameter.direction.type)
     order = 40
 
     def __init__(self, subject: UML.ActivityParameterNode, event_manager):

@@ -12,6 +12,7 @@ from gaphor.diagram.propertypages import (
     unsubscribe_all_on_destroy,
 )
 from gaphor.transaction import Transaction
+from gaphor.UML import recipes
 from gaphor.UML.actions.activitynodes import DecisionNodeItem, ForkNodeItem
 from gaphor.UML.actions.objectnode import ObjectNodeItem
 
@@ -43,7 +44,14 @@ class ObjectNodePropertyPage(PropertyPageBase):
         )
 
         upper_bound = builder.get_object("upper-bound")
-        upper_bound.set_text(subject.upperBound or "")
+        upperBoundText = ""
+        if subject.upperBound:
+            raw_upper_bound_text = UML.recipes.get_literal_value_as_string(
+                subject.upperBound
+            )
+            if isinstance(raw_upper_bound_text, str):
+                upperBoundText = raw_upper_bound_text
+        upper_bound.set_text(upperBoundText)
 
         ordering = builder.get_object("ordering")
         ordering.set_selected(self.ORDERING_VALUES.index(subject.ordering))
@@ -52,8 +60,14 @@ class ObjectNodePropertyPage(PropertyPageBase):
 
     def _on_upper_bound_change(self, entry):
         value = entry.get_text().strip()
-        with Transaction(self.event_manager):
-            self.subject.upperBound = value
+        with Transaction(self.event_manager, context="editing"):
+            if value == "":
+                self.subject.upperBound = None
+            else:
+                upperBound = self.subject.model.create(UML.LiteralString)
+                upperBound.value = value
+                upperBound.objectNode = self.subject
+                self.subject.upperBound = upperBound
 
     def _on_ordering_change(self, dropdown, _pspec):
         value = self.ORDERING_VALUES[dropdown.get_selected()]
@@ -110,7 +124,7 @@ class ValueSpecificationActionPropertyPage(PropertyPageBase):
         return builder.get_object("value-specifiation-action-editor")
 
     def _on_value_change(self, entry):
-        with Transaction(self.event_manager):
+        with Transaction(self.event_manager, context="editing"):
             value = entry.get_text()
             self.subject.value = value
 
@@ -244,14 +258,24 @@ class JoinNodePropertyPage(PropertyPageBase):
         )
 
         join_spec = builder.get_object("join-spec")
-        join_spec.set_text(subject.joinSpec or "")
+        join_spec.set_text(
+            UML.recipes.get_literal_value_as_string(subject.joinSpec) or ""
+        )
 
         return builder.get_object("join-node-editor")
 
     def _on_join_spec_change(self, entry):
         value = entry.get_text().strip()
-        with Transaction(self.event_manager):
-            self.subject.joinSpec = value
+        with Transaction(self.event_manager, context="editing"):
+            if (
+                self.subject.joinSpec is None
+                or UML.recipes.get_literal_value_as_string(self.subject.joinSpec)
+                != value
+            ):
+                joinSpec = self.subject.model.create(UML.LiteralString)
+                joinSpec.value = value
+                joinSpec.joinNode = self.subject
+                self.subject.joinSpec = joinSpec
 
 
 @PropertyPages.register(UML.ControlFlow)
@@ -279,11 +303,11 @@ class FlowPropertyPageAbstract(PropertyPageBase):
         )
 
         guard = builder.get_object("guard")
-        guard.set_text(subject.guard or "")
+        guard.set_text(subject.guard and str(subject.guard.value) or "")  # type: ignore[attr-defined]
 
         @handler_blocking(guard, "changed", self._on_guard_change)
         def handler(event):
-            v = event.new_value
+            v = event.new_value.value
             if v != guard.get_text():
                 guard.set_text(v or "")
 
@@ -295,8 +319,15 @@ class FlowPropertyPageAbstract(PropertyPageBase):
 
     def _on_guard_change(self, entry):
         value = entry.get_text().strip()
-        with Transaction(self.event_manager):
-            self.subject.guard = value
+        with Transaction(self.event_manager, context="editing"):
+            if (
+                self.subject.guard is None
+                or UML.recipes.get_literal_value_as_string(self.subject.guard) != value
+            ):
+                guard = self.subject.model.create(UML.LiteralString)
+                guard.value = value
+                guard.activityEdge = self.subject
+                self.subject.guard = guard
 
 
 @PropertyPages.register(UML.Pin)
@@ -338,10 +369,14 @@ class PinPropertyPage(PropertyPageBase):
         dropdown.connect("notify::selected", self._on_type_changed)
 
         multiplicity_lower = builder.get_object("multiplicity-lower")
-        multiplicity_lower.set_text(subject.lowerValue or "")
+        multiplicity_lower.set_text(
+            recipes.get_multiplicity_lower_value_as_string(subject) or ""
+        )
 
         multiplicity_upper = builder.get_object("multiplicity-upper")
-        multiplicity_upper.set_text(subject.upperValue or "")
+        multiplicity_upper.set_text(
+            recipes.get_multiplicity_upper_value_as_string(subject) or ""
+        )
 
         return builder.get_object("pin-editor")
 
@@ -369,10 +404,10 @@ class PinPropertyPage(PropertyPageBase):
 
     def _on_multiplicity_lower_change(self, entry):
         value = entry.get_text().strip()
-        with Transaction(self.event_manager):
-            self.subject.lowerValue = value
+        with Transaction(self.event_manager, context="editing"):
+            recipes.set_multiplicity_lower_value(self.subject, value)
 
     def _on_multiplicity_upper_change(self, entry):
         value = entry.get_text().strip()
-        with Transaction(self.event_manager):
-            self.subject.upperValue = value
+        with Transaction(self.event_manager, context="editing"):
+            recipes.set_multiplicity_upper_value(self.subject, value)

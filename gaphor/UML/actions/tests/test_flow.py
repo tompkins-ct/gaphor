@@ -2,7 +2,6 @@ from gaphas.canvas import instant_cairo_context
 
 from gaphor import UML
 from gaphor.core.modeling import DrawContext
-from gaphor.core.modeling.diagram import FALLBACK_STYLE
 from gaphor.UML.actions.flow import ControlFlowItem
 
 
@@ -33,7 +32,10 @@ def test_guard_text_update(create):
 
     assert "" == guard.child.text()
 
-    flow.subject.guard = "GuardMe"
+    specification = flow.model.create(UML.LiteralString)
+    specification.value = "GuardMe"
+    specification.owningConstraint = flow.subject.guard
+    flow.subject.guard = specification
     assert "[GuardMe]" == guard.child.text()
 
     flow.subject = None
@@ -44,7 +46,7 @@ def test_draw(create, diagram):
     flow = create(ControlFlowItem, UML.ControlFlow)
     context = DrawContext(
         cairo=instant_cairo_context(),
-        style=FALLBACK_STYLE,
+        style={},
         hovered=True,
         focused=True,
         selected=True,
