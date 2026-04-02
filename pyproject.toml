@@ -9,10 +9,6 @@ authors = [
 
 readme = "README.md"
 
-homepage = "https://gaphor.org/"
-repository = "https://github.com/gaphor/gaphor"
-documentation = "https://docs.gaphor.org/"
-
 keywords = ["GTK", "diagram", "UML", "MBSE", "modeling"]
 
 classifiers = [
@@ -101,6 +97,7 @@ documentation = "https://docs.gaphor.org/"
 "console_window" = "gaphor.plugins.console.consolewindow:ConsoleWindow"
 "diagram_export" = "gaphor.plugins.diagramexport.export:DiagramExport"
 "auto_layout" = "gaphor.plugins.autolayout:AutoLayoutService"
+"html_report" = "gaphor.plugins.htmlreport.report:HtmlReportExport"
 "auto_layout_elk" = "gaphor.plugins.autolayoutELK:AutoLayoutELKService"
 
 [project.entry-points."gaphor.modelinglanguages"]
@@ -116,6 +113,7 @@ gui = "gaphor.main:gui_parser"
 self-test = "gaphor.main:self_test_parser"
 exec = "gaphor.main:exec_parser"
 export = "gaphor.plugins.diagramexport.exportcli:export_parser"
+html-report = "gaphor.plugins.htmlreport.reportcli:html_report_parser"
 install-schemas = "gaphor.ui.installschemas:install_schemas_parser"
 
 [project.entry-points."babel.extractors"]
